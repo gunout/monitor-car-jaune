@@ -11,6 +11,7 @@
   --yellow:#ffcc00; --yellow-soft:#fff8e0;
   --red:#e1000f; --red-soft:#ffe9e9;
   --green:#00a95f; --green-soft:#e6f7ee;
+  --orange:#e67e22; --purple:#7b5cff; --dark:#3a3a3a;
   --white:#fff; --g50:#f6f6f6; --g100:#eee; --g200:#e5e5e5;
   --g500:#929292; --g700:#3a3a3a; --g900:#1e1e1e;
   --mono:'SF Mono',Menlo,Consolas,monospace;
@@ -32,7 +33,7 @@ header h1 .badge{background:var(--yellow);color:var(--blue);
 .stats{margin-top:6px;display:flex;gap:8px;flex-wrap:wrap;
   font-family:var(--mono);font-size:11px}
 .stats span{background:rgba(255,255,255,.15);padding:3px 10px;border-radius:4px}
-.app{display:grid;grid-template-columns:180px 1fr;min-height:calc(100vh - 110px)}
+.app{display:grid;grid-template-columns:200px 1fr;min-height:calc(100vh - 110px)}
 .sidebar{background:var(--white);border-right:1px solid var(--g200);
   padding:12px 0;overflow-y:auto;max-height:calc(100vh - 110px);
   position:sticky;top:100px;align-self:start}
@@ -43,7 +44,7 @@ header h1 .badge{background:var(--yellow);color:var(--blue);
 .sb-search input{width:100%;padding:7px 10px;border:1px solid var(--g200);
   border-radius:4px;font-size:12px;font-family:var(--sans)}
 .sb-search input:focus{outline:none;border-color:var(--blue)}
-.line-btn{display:flex;align-items:center;gap:8px;padding:7px 14px;
+.line-btn{display:flex;align-items:center;gap:6px;padding:7px 12px;
   cursor:pointer;transition:all .1s;border-left:3px solid transparent;
   font-size:12px}
 .line-btn:hover{background:var(--blue-soft);border-left-color:var(--blue)}
@@ -53,6 +54,7 @@ header h1 .badge{background:var(--yellow);color:var(--blue);
   border-radius:4px;font-family:var(--mono);font-size:11px;font-weight:800;
   min-width:38px;text-align:center;flex-shrink:0}
 .line-btn.active .line-code{background:var(--yellow);color:var(--blue)}
+.line-icon{font-size:11px;flex-shrink:0}
 .line-count{font-family:var(--mono);font-size:10px;color:var(--g500);
   margin-left:auto}
 .main{padding:16px 20px;overflow-y:auto;max-height:calc(100vh - 110px)}
@@ -60,17 +62,33 @@ header h1 .badge{background:var(--yellow);color:var(--blue);
 .line-header{background:var(--white);border-radius:10px;padding:16px 20px;
   margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,.06);
   border-left:5px solid var(--blue)}
+.line-header.zone-express{border-left-color:var(--yellow)}
+.line-header.zone-nord{border-left-color:var(--blue)}
+.line-header.zone-sud{border-left-color:var(--green)}
+.line-header.zone-ouest{border-left-color:var(--orange)}
+.line-header.zone-est{border-left-color:var(--red)}
+.line-header.zone-aeroport{border-left-color:var(--purple)}
+.line-header.zone-zoom{border-left-color:var(--dark)}
 .line-title{font-size:18px;font-weight:800;display:flex;
   align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:8px}
 .line-title .code{background:var(--blue);color:var(--white);
   padding:5px 14px;border-radius:6px;font-family:var(--mono);
   font-size:16px;font-weight:900}
+.zone-badge{display:inline-block;padding:3px 10px;border-radius:5px;
+  font-family:var(--mono);font-size:10px;font-weight:800;
+  text-transform:uppercase;letter-spacing:.5px}
+.zone-badge.zone-express{background:var(--yellow);color:var(--blue)}
+.zone-badge.zone-nord{background:var(--blue);color:var(--white)}
+.zone-badge.zone-sud{background:var(--green);color:var(--white)}
+.zone-badge.zone-ouest{background:var(--orange);color:var(--white)}
+.zone-badge.zone-est{background:var(--red);color:var(--white)}
+.zone-badge.zone-aeroport{background:var(--purple);color:var(--white)}
+.zone-badge.zone-zoom{background:var(--dark);color:var(--white)}
 .line-info{display:flex;gap:6px;flex-wrap:wrap;font-family:var(--mono);
   font-size:11px;color:var(--g700)}
 .line-info span{background:var(--g50);padding:4px 10px;border-radius:4px;
   border:1px solid var(--g200)}
 
-/* Barre de recherche + filtres */
 .toolbar{background:var(--white);border-radius:10px;padding:12px 16px;
   margin-bottom:14px;display:flex;gap:10px;flex-wrap:wrap;
   align-items:center;box-shadow:0 2px 8px rgba(0,0,0,.06)}
@@ -97,9 +115,7 @@ header h1 .badge{background:var(--yellow);color:var(--blue);
 .btn:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-soft)}
 .btn.primary{background:var(--green);color:var(--white);border-color:var(--green)}
 .btn.primary:hover{background:#008a4c;border-color:#008a4c;color:var(--white)}
-.btn:disabled{opacity:.4;cursor:not-allowed}
 
-/* Tableau */
 .tbl-wrap{background:var(--white);border-radius:10px;overflow:hidden;
   box-shadow:0 2px 8px rgba(0,0,0,.06);overflow-x:auto}
 table{width:100%;border-collapse:collapse;font-size:12px}
@@ -159,7 +175,6 @@ table.stops tr.terminus-row .s{font-weight:800;color:var(--green)}
 table.stops tr.depart-row{background:var(--blue-soft)}
 table.stops tr.depart-row .s{font-weight:800;color:var(--blue)}
 
-/* Pagination */
 .pagination{display:flex;gap:6px;align-items:center;justify-content:center;
   padding:14px;background:var(--white);margin-top:12px;border-radius:10px;
   box-shadow:0 2px 8px rgba(0,0,0,.06);flex-wrap:wrap}
@@ -176,10 +191,8 @@ table.stops tr.depart-row .s{font-weight:800;color:var(--blue)}
 .pagination .size-sel{padding:6px 8px;border:1px solid var(--g200);
   border-radius:4px;font-size:11px;font-family:var(--sans)}
 
-/* Highlight recherche */
 mark{background:var(--yellow);color:var(--g900);padding:0 2px;
   border-radius:2px;font-weight:700}
-
 .loading{text-align:center;padding:60px;color:var(--g500)}
 .spin{width:40px;height:40px;border:3px solid var(--g200);
   border-top-color:var(--blue);border-radius:50%;
@@ -188,7 +201,6 @@ mark{background:var(--yellow);color:var(--g900);padding:0 2px;
 .err{background:#fff5f5;border:1px solid var(--red);
   border-left:4px solid var(--red);padding:20px;border-radius:6px;
   color:var(--red);margin:20px;font-size:13px}
-
 .kbd{display:inline-block;background:var(--g100);border:1px solid var(--g200);
   border-radius:3px;padding:1px 6px;font-family:var(--mono);font-size:10px;
   color:var(--g700);font-weight:700}
@@ -258,11 +270,29 @@ function highlight(text, query){
   return esc(t.slice(0, idx)) + '<mark>' + esc(t.slice(idx, idx + q.length)) + '</mark>' + esc(t.slice(idx + q.length));
 }
 function parseHM(t){ if (!t) return null; const [h,m] = t.split(':').map(Number); if (isNaN(h)||isNaN(m)) return null; return h*60+m; }
-function formatHM(min){ if (min == null) return '—'; return String(Math.floor(min/60)%24).padStart(2,'0') + ':' + String(min%60).padStart(2,'0'); }
-function duration(from, to){ const a = parseHM(from), b = parseHM(to); if (a==null||b==null) return null; let d = b-a; if (d<0) d += 1440; return d; }
 function formatDuration(min){ if (min==null) return '—'; if (min<60) return min+' min'; const h = Math.floor(min/60); const m = min%60; return m===0 ? h+'h' : h+'h'+String(m).padStart(2,'0'); }
+function duration(from, to){ const a = parseHM(from), b = parseHM(to); if (a==null||b==null) return null; let d = b-a; if (d<0) d += 1440; return d; }
 function dayClass(sid){ const s = (sid||'').toLowerCase(); if (s.includes('dim')||s.includes('sun')||s.includes('df')) return 'sun'; if (s.includes('sam')||s.includes('sat')) return 'sat'; return 'week'; }
 function dayLabel(sid){ const s = (sid||'').toLowerCase(); if (s.includes('dim')||s.includes('sun')||s.includes('df')) return 'Dim'; if (s.includes('sam')||s.includes('sat')) return 'Sam'; return 'Sem'; }
+
+function getZone(code){
+  const c = code.toUpperCase();
+  if (c.endsWith('X')) return 'express';
+  if (c === 'ZO') return 'zoom';
+  if (c.startsWith('T')) return 'aeroport';
+  if (c.startsWith('E')) return 'est';
+  if (c.startsWith('O')) return 'ouest';
+  if (c.startsWith('S')) return 'sud';
+  return 'nord';
+}
+function getZoneLabel(zone){
+  return {express:'⚡ Express',nord:'🔵 Nord',sud:'🟢 Sud',ouest:'🟠 Ouest',
+          est:'🔴 Est',aeroport:'🟣 Aéroport',zoom:'⚫ Zoom'}[zone] || zone;
+}
+function getZoneIcon(zone){
+  return {express:'⚡',nord:'🔵',sud:'🟢',ouest:'🟠',est:'🔴',
+          aeroport:'🟣',zoom:'⚫'}[zone] || '';
+}
 
 async function load(){
   const main = document.getElementById('main');
@@ -304,12 +334,17 @@ function renderSidebar(){
   const list = document.getElementById('lineList');
   const q = normalize(state.lineSearch);
   const lines = state.lines.filter(l => !q || normalize(l.code + ' ' + l.name).includes(q));
-  list.innerHTML = lines.map(l => `
-    <div class="line-btn ${l.code === state.selected ? 'active' : ''}" data-code="${esc(l.code)}">
-      <span class="line-code">${esc(l.code)}</span>
-      <span class="line-count">${l.trips_count}</span>
-    </div>
-  `).join('') || '<div style="padding:14px;text-align:center;color:var(--g500);font-size:11px">Aucune ligne</div>';
+  list.innerHTML = lines.map(l => {
+    const zone = getZone(l.code);
+    const icon = getZoneIcon(zone);
+    return `
+      <div class="line-btn ${l.code === state.selected ? 'active' : ''}" data-code="${esc(l.code)}">
+        <span class="line-code">${esc(l.code)}</span>
+        <span class="line-icon">${icon}</span>
+        <span class="line-count">${l.trips_count}</span>
+      </div>
+    `;
+  }).join('') || '<div style="padding:14px;text-align:center;color:var(--g500);font-size:11px">Aucune ligne</div>';
   list.querySelectorAll('.line-btn').forEach(el => {
     el.addEventListener('click', () => selectLine(el.dataset.code));
   });
@@ -454,7 +489,6 @@ function renderMain(){
     `;
   }).join('');
 
-  // Pagination
   let paginationHtml = '';
   if (totalPages > 1){
     const btn = (p, label, disabled) =>
@@ -490,11 +524,13 @@ function renderMain(){
     `;
   }
 
+  const zone = getZone(line.code);
   main.innerHTML = `
-    <div class="line-header">
+    <div class="line-header zone-${zone}">
       <div class="line-title">
         <span class="code">${esc(line.code)}</span>
         ${esc(line.name)}
+        <span class="zone-badge zone-${zone}">${getZoneLabel(zone)}</span>
       </div>
       <div class="line-info">
         <span>🚏 ${line.trips_count} départs</span>
@@ -556,7 +592,6 @@ function renderMain(){
     </div>
   `;
 
-  // Event listeners
   document.getElementById('searchInput').addEventListener('input', e => {
     state.search = e.target.value;
     state.page = 1;
@@ -632,13 +667,11 @@ function exportCsv(line, trips){
   URL.revokeObjectURL(url);
 }
 
-// Recherche dans la sidebar
 document.getElementById('lineSearch').addEventListener('input', e => {
   state.lineSearch = e.target.value;
   renderSidebar();
 });
 
-// Raccourcis clavier
 document.addEventListener('keydown', e => {
   if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
   if (e.key === '/'){ e.preventDefault(); document.getElementById('searchInput')?.focus(); }
