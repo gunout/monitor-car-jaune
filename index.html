@@ -1,1 +1,483 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🚌 Car Jaune 974 — Tous les départs</title>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --blue:#0055a4; --blue-hi:#0077dd; --blue-soft:#e6f0fa;
+  --yellow:#ffcc00; --yellow-soft:#fff8e0;
+  --red:#e1000f; --red-soft:#ffe9e9;
+  --green:#00a95f; --green-soft:#e6f7ee;
+  --white:#fff; --g50:#f6f6f6; --g100:#eee; --g200:#e5e5e5;
+  --g500:#929292; --g700:#3a3a3a; --g900:#1e1e1e;
+  --mono:'SF Mono',Menlo,Consolas,monospace;
+  --sans:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+}
+body{font-family:var(--sans);background:var(--g50);color:var(--g900);
+  font-size:13px;line-height:1.5;min-height:100vh}
+.band{height:6px;background:linear-gradient(to right,
+  var(--blue) 0%,var(--blue) 33%,var(--yellow) 33%,var(--yellow) 66%,
+  var(--red) 66%,var(--red) 100%)}
+header{background:linear-gradient(135deg,var(--blue),var(--blue-hi));
+  color:var(--white);padding:16px 24px;position:sticky;top:6px;z-index:100;
+  box-shadow:0 4px 12px rgba(0,85,164,.25)}
+h1{font-size:20px;font-weight:900;display:flex;align-items:center;
+  gap:12px;flex-wrap:wrap}
+h1 .badge{background:var(--yellow);color:var(--blue);padding:3px 10px;
+  border-radius:5px;font-family:var(--mono);font-size:12px;font-weight:800}
+.stats{margin-top:8px;display:flex;gap:10px;flex-wrap:wrap;
+  font-family:var(--mono);font-size:11px}
+.stats span{background:rgba(255,255,255,.15);padding:4px 10px;border-radius:4px}
+.app{display:grid;grid-template-columns:200px 1fr;min-height:calc(100vh - 120px)}
+.sidebar{background:var(--white);border-right:1px solid var(--g200);
+  padding:14px 0;overflow-y:auto;max-height:calc(100vh - 120px);
+  position:sticky;top:110px;align-self:start}
+.sb-title{padding:0 14px 10px;font-size:10px;text-transform:uppercase;
+  letter-spacing:1.5px;color:var(--g500);font-family:var(--mono);
+  font-weight:700;border-bottom:1px solid var(--g100);margin-bottom:8px}
+.line-btn{display:flex;align-items:center;gap:8px;padding:8px 14px;
+  cursor:pointer;transition:all .15s;border-left:3px solid transparent;
+  font-size:12px}
+.line-btn:hover{background:var(--blue-soft);border-left-color:var(--blue)}
+.line-btn.active{background:var(--blue-soft);border-left-color:var(--blue);
+  font-weight:700}
+.line-code{background:var(--blue);color:var(--white);padding:2px 8px;
+  border-radius:4px;font-family:var(--mono);font-size:11px;font-weight:800;
+  min-width:40px;text-align:center;flex-shrink:0}
+.line-btn.active .line-code{background:var(--yellow);color:var(--blue)}
+.line-count{font-family:var(--mono);font-size:10px;color:var(--g500);
+  margin-left:auto}
+.main{padding:20px 24px;overflow-y:auto;max-height:calc(100vh - 120px)}
 
+.line-header{background:var(--white);border-radius:10px;padding:18px 20px;
+  margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.06);
+  border-left:5px solid var(--blue)}
+.line-title{font-size:20px;font-weight:800;display:flex;
+  align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:10px}
+.line-title .code{background:var(--blue);color:var(--white);
+  padding:6px 16px;border-radius:6px;font-family:var(--mono);
+  font-size:18px;font-weight:900}
+.line-info{display:flex;gap:8px;flex-wrap:wrap;font-family:var(--mono);
+  font-size:11px;color:var(--g700)}
+.line-info span{background:var(--g50);padding:5px 12px;border-radius:4px;
+  border:1px solid var(--g200)}
+
+.filters{background:var(--white);border-radius:10px;padding:14px 20px;
+  margin-bottom:16px;display:flex;gap:12px;flex-wrap:wrap;
+  align-items:center;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.filters label{font-size:11px;color:var(--g700);font-weight:700;
+  text-transform:uppercase;letter-spacing:.5px;font-family:var(--mono)}
+.filters select,.filters input{padding:8px 12px;border:1px solid var(--g200);
+  border-radius:6px;font-size:13px;background:var(--white);
+  font-family:var(--sans);font-weight:600}
+.filters select:focus,.filters input:focus{outline:none;
+  border-color:var(--blue);box-shadow:0 0 0 3px var(--blue-soft)}
+.filters .count{font-family:var(--mono);font-size:12px;color:var(--blue);
+  font-weight:800;margin-left:auto;background:var(--blue-soft);
+  padding:6px 14px;border-radius:6px}
+.btn-export{background:var(--green);color:var(--white);border:none;
+  padding:8px 16px;border-radius:6px;cursor:pointer;font-size:12px;
+  font-weight:700;font-family:var(--sans);transition:all .15s}
+.btn-export:hover{background:#008a4c}
+
+/* Tableau principal */
+.tbl-wrap{background:var(--white);border-radius:10px;overflow:hidden;
+  box-shadow:0 2px 8px rgba(0,0,0,.06);overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12px}
+thead{background:var(--g50);position:sticky;top:0;z-index:10}
+thead th{padding:12px 14px;text-align:left;font-family:var(--mono);
+  font-size:10px;text-transform:uppercase;letter-spacing:1px;
+  color:var(--g500);font-weight:700;border-bottom:2px solid var(--g200);
+  white-space:nowrap}
+tbody tr{border-bottom:1px solid var(--g100);transition:all .1s}
+tbody tr:hover{background:var(--blue-soft)}
+tbody tr.dep-row{cursor:pointer;font-weight:600}
+tbody tr.dep-row.open{background:var(--blue-soft)}
+tbody td{padding:11px 14px;vertical-align:middle}
+td.dep{font-family:var(--mono);font-size:15px;font-weight:800;
+  color:var(--blue)}
+td.arr{font-family:var(--mono);font-size:15px;font-weight:800;
+  color:var(--green)}
+td.dur{font-family:var(--mono);font-size:11px;color:var(--g700);
+  background:var(--g50);border-radius:4px;text-align:center;
+  font-weight:700}
+td.terminus{font-size:12px;color:var(--g900);font-weight:600}
+td.headsign{font-size:11px;color:var(--g500);font-family:var(--mono)}
+td.day{font-family:var(--mono);font-size:10px;font-weight:800;
+  text-align:center;padding:3px 8px;border-radius:3px;
+  background:var(--g100);color:var(--g700);
+  display:inline-block}
+td.day.week{background:var(--blue-soft);color:var(--blue)}
+td.day.sat{background:var(--yellow-soft);color:#8a5e00}
+td.day.sun{background:var(--red-soft);color:var(--red)}
+td.nstops{font-family:var(--mono);font-size:11px;color:var(--g500);
+  text-align:center}
+td.arrow{color:var(--blue);font-weight:800;text-align:center;width:30px}
+
+/* Détail déplié — tableau des arrêts */
+tr.detail-row td{padding:0;background:var(--g50);
+  border-bottom:2px solid var(--blue)}
+.detail-inner{padding:14px 20px}
+.detail-title{font-size:10px;text-transform:uppercase;
+  letter-spacing:1.5px;color:var(--g500);font-family:var(--mono);
+  font-weight:700;margin-bottom:10px}
+table.stops{width:100%;border-collapse:collapse;font-size:12px;
+  background:var(--white);border-radius:6px;overflow:hidden}
+table.stops th{background:var(--g100);padding:8px 12px;text-align:left;
+  font-family:var(--mono);font-size:10px;color:var(--g700);
+  font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+table.stops td{padding:8px 12px;border-bottom:1px solid var(--g100)}
+table.stops tr:last-child td{border-bottom:none}
+table.stops .n{font-family:var(--mono);font-size:10px;color:var(--g500);
+  width:40px;text-align:center;font-weight:700}
+table.stops .s{color:var(--g900);font-weight:500}
+table.stops .a{font-family:var(--mono);font-size:11px;color:var(--g700);
+  text-align:right;width:80px}
+table.stops .d{font-family:var(--mono);font-size:12px;color:var(--blue);
+  font-weight:800;text-align:right;width:80px}
+table.stops tr.terminus-row{background:var(--green-soft)}
+table.stops tr.terminus-row .s{font-weight:800;color:var(--green)}
+table.stops tr.depart-row{background:var(--blue-soft)}
+table.stops tr.depart-row .s{font-weight:800;color:var(--blue)}
+
+.loading{text-align:center;padding:60px;color:var(--g500)}
+.spin{width:40px;height:40px;border:3px solid var(--g200);
+  border-top-color:var(--blue);border-radius:50%;
+  animation:sp .8s linear infinite;margin:0 auto 12px}
+@keyframes sp{to{transform:rotate(360deg)}}
+.err{background:#fff5f5;border:1px solid var(--red);
+  border-left:4px solid var(--red);padding:20px;border-radius:6px;
+  color:var(--red);margin:20px;font-size:13px}
+
+@media(max-width:900px){
+  .app{grid-template-columns:1fr}
+  .sidebar{position:static;max-height:200px;border-right:none;
+    border-bottom:1px solid var(--g200)}
+  .main{max-height:none}
+  thead th:nth-child(4),tbody td:nth-child(4),
+  thead th:nth-child(6),tbody td:nth-child(6){display:none}
+}
+</style>
+</head>
+<body>
+<div class="band"></div>
+<header>
+  <h1>🚌 CAR JAUNE 974 <span class="badge">TOUS LES DÉPARTS 2025</span></h1>
+  <div class="stats" id="headerStats">Chargement…</div>
+</header>
+
+<div class="app">
+  <aside class="sidebar">
+    <div class="sb-title">Lignes</div>
+    <div id="lineList"></div>
+  </aside>
+  <main class="main" id="main">
+    <div class="loading"><div class="spin"></div>Chargement du réseau…</div>
+  </main>
+</div>
+
+<script>
+const DATA_URL = 'data/car_jaune_full.json';
+const state = { data:null, lines:[], selected:null, filterDay:'all', filterDir:'all', filterHour:'all', openTrips:new Set() };
+
+function esc(s){ return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+function parseHM(t){
+  if (!t) return null;
+  const [h,m] = t.split(':').map(Number);
+  if (isNaN(h) || isNaN(m)) return null;
+  return h*60 + m;
+}
+function formatHM(min){
+  if (min == null) return '—';
+  const h = Math.floor(min/60) % 24;
+  const m = min % 60;
+  return String(h).padStart(2,'0') + ':' + String(m).padStart(2,'0');
+}
+function duration(from, to){
+  const a = parseHM(from), b = parseHM(to);
+  if (a == null || b == null) return null;
+  let d = b - a;
+  if (d < 0) d += 24*60;
+  return d;
+}
+function formatDuration(min){
+  if (min == null) return '—';
+  if (min < 60) return min + ' min';
+  const h = Math.floor(min/60);
+  const m = min % 60;
+  return m === 0 ? h + 'h' : h + 'h' + String(m).padStart(2,'0');
+}
+function dayClass(sid){
+  const s = (sid || '').toLowerCase();
+  if (s.includes('dim') || s.includes('sun') || s.includes('df')) return 'sun';
+  if (s.includes('sam') || s.includes('sat')) return 'sat';
+  return 'week';
+}
+function dayLabel(sid){
+  const s = (sid || '').toLowerCase();
+  if (s.includes('dim') || s.includes('sun') || s.includes('df')) return 'Dim';
+  if (s.includes('sam') || s.includes('sat')) return 'Sam';
+  return 'Sem';
+}
+
+async function load(){
+  const main = document.getElementById('main');
+  try {
+    const r = await fetch(DATA_URL + '?t=' + Date.now(), {cache:'no-store'});
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const data = await r.json();
+    state.data = data;
+    state.lines = (data.lines || []).sort((a,b)=>{
+      const re = /^([A-Z]+)(\d*)(X?)$/;
+      const ma = a.code.match(re), mb = b.code.match(re);
+      if (ma && mb){
+        if (ma[1] !== mb[1]) return ma[1].localeCompare(mb[1]);
+        if (ma[2] !== mb[2]) return (parseInt(ma[2])||0) - (parseInt(mb[2])||0);
+        return (ma[3]||'').localeCompare(mb[3]||'');
+      }
+      return a.code.localeCompare(b.code);
+    });
+    renderHeader();
+    renderSidebar();
+    if (state.lines.length) selectLine(state.lines[0].code);
+  } catch(e){
+    main.innerHTML = `<div class="err"><strong>❌ ${esc(e.message)}</strong><br><br>
+      Lance : <code>python scripts/parse_car_jaune_full.py</code></div>`;
+  }
+}
+
+function renderHeader(){
+  const c = state.data.counts || {};
+  document.getElementById('headerStats').innerHTML = `
+    <span>📊 ${c.lines} lignes</span>
+    <span>📍 ${c.stops} arrêts</span>
+    <span>🚏 ${c.trips} trajets</span>
+    <span>⏱️ ${(c.stop_times||0).toLocaleString('fr-FR')} passages</span>
+  `;
+}
+
+function renderSidebar(){
+  const list = document.getElementById('lineList');
+  list.innerHTML = state.lines.map(l => `
+    <div class="line-btn ${l.code === state.selected ? 'active' : ''}" data-code="${esc(l.code)}">
+      <span class="line-code">${esc(l.code)}</span>
+      <span class="line-count">${l.trips_count}</span>
+    </div>
+  `).join('');
+  list.querySelectorAll('.line-btn').forEach(el => {
+    el.addEventListener('click', () => selectLine(el.dataset.code));
+  });
+}
+
+function selectLine(code){
+  state.selected = code;
+  state.filterDay = 'all';
+  state.filterDir = 'all';
+  state.filterHour = 'all';
+  state.openTrips.clear();
+  renderSidebar();
+  renderMain();
+}
+
+function renderMain(){
+  const main = document.getElementById('main');
+  const line = state.lines.find(l => l.code === state.selected);
+  if (!line){ main.innerHTML = ''; return; }
+
+  // Filtres
+  let trips = line.departures;
+  if (state.filterDay !== 'all') trips = trips.filter(t => dayClass(t.service_id) === state.filterDay);
+  if (state.filterDir !== 'all') trips = trips.filter(t => t.headsign === state.filterDir);
+  if (state.filterHour !== 'all') {
+    trips = trips.filter(t => {
+      const h = parseInt((t.first_departure || '00:00').split(':')[0]);
+      if (state.filterHour === 'morning') return h >= 5 && h < 12;
+      if (state.filterHour === 'afternoon') return h >= 12 && h < 18;
+      if (state.filterHour === 'evening') return h >= 18 && h < 24;
+      return true;
+    });
+  }
+
+  const dirs = [...new Set(line.departures.map(d => d.headsign).filter(Boolean))].sort();
+  const dirsOpts = dirs.map(d =>
+    `<option value="${esc(d)}" ${state.filterDir === d ? 'selected':''}>${esc(d)}</option>`
+  ).join('');
+
+  const rows = trips.map((t, i) => {
+    const stops = t.stops || [];
+    const depTime = stops[0]?.dep || '';
+    const arrTime = stops[stops.length-1]?.arr || '';
+    const depStop = stops[0]?.stop || '';
+    const arrStop = stops[stops.length-1]?.stop || '';
+    const dur = duration(depTime, arrTime);
+    const dClass = dayClass(t.service_id);
+    const isOpen = state.openTrips.has(t.trip_id);
+
+    const stopRows = stops.map((s, j) => {
+      const isTerminus = j === stops.length - 1;
+      const isDepart = j === 0;
+      const rowClass = isTerminus ? 'terminus-row' : (isDepart ? 'depart-row' : '');
+      return `
+        <tr class="${rowClass}">
+          <td class="n">${String(j+1).padStart(2,'0')}</td>
+          <td class="s">${esc(s.stop)}${isTerminus ? ' 🏁' : (isDepart ? ' 🚏' : '')}</td>
+          <td class="a">${esc(s.arr || '—')}</td>
+          <td class="d">${esc(s.dep || '—')}</td>
+        </tr>
+      `;
+    }).join('');
+
+    return `
+      <tr class="dep-row ${isOpen ? 'open' : ''}" data-trip="${esc(t.trip_id)}">
+        <td class="dep">${esc(depTime || '—')}</td>
+        <td class="terminus" title="${esc(depStop)}">${esc(depStop)}</td>
+        <td class="arrow">→</td>
+        <td class="terminus" title="${esc(arrStop)}">${esc(arrStop)}</td>
+        <td class="arr">${esc(arrTime || '—')}</td>
+        <td class="dur">${formatDuration(dur)}</td>
+        <td class="headsign">${esc(t.headsign || '—')}</td>
+        <td><span class="day ${dClass}">${dayLabel(t.service_id)}</span></td>
+        <td class="nstops">${stops.length}</td>
+      </tr>
+      ${isOpen ? `
+      <tr class="detail-row">
+        <td colspan="9">
+          <div class="detail-inner">
+            <div class="detail-title">🕐 Arrêts détaillés · ${esc(t.headsign || '')}</div>
+            <table class="stops">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Arrêt</th>
+                  <th style="text-align:right">Arrivée</th>
+                  <th style="text-align:right">Départ</th>
+                </tr>
+              </thead>
+              <tbody>${stopRows}</tbody>
+            </table>
+          </div>
+        </td>
+      </tr>` : ''}
+    `;
+  }).join('');
+
+  main.innerHTML = `
+    <div class="line-header">
+      <div class="line-title">
+        <span class="code">${esc(line.code)}</span>
+        ${esc(line.name)}
+      </div>
+      <div class="line-info">
+        <span>🚏 ${line.trips_count} départs</span>
+        <span>📍 ${line.stops_count} arrêts</span>
+        <span>🧭 ${line.directions.length} directions</span>
+      </div>
+    </div>
+
+    <div class="filters">
+      <label>Jour :</label>
+      <select id="dayFilter">
+        <option value="all" ${state.filterDay==='all'?'selected':''}>Tous</option>
+        <option value="week" ${state.filterDay==='week'?'selected':''}>Semaine</option>
+        <option value="sat" ${state.filterDay==='sat'?'selected':''}>Samedi</option>
+        <option value="sun" ${state.filterDay==='sun'?'selected':''}>Dimanche</option>
+      </select>
+      <label>Direction :</label>
+      <select id="dirFilter">
+        <option value="all" ${state.filterDir==='all'?'selected':''}>Toutes</option>
+        ${dirsOpts}
+      </select>
+      <label>Moment :</label>
+      <select id="hourFilter">
+        <option value="all" ${state.filterHour==='all'?'selected':''}>Toute la journée</option>
+        <option value="morning" ${state.filterHour==='morning'?'selected':''}>Matin (5h-12h)</option>
+        <option value="afternoon" ${state.filterHour==='afternoon'?'selected':''}>Après-midi (12h-18h)</option>
+        <option value="evening" ${state.filterHour==='evening'?'selected':''}>Soir (18h-24h)</option>
+      </select>
+      <button class="btn-export" id="exportBtn">📥 Export CSV</button>
+      <span class="count">${trips.length} / ${line.trips_count} départs</span>
+    </div>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Départ</th>
+            <th>Arrêt de départ</th>
+            <th></th>
+            <th>Terminus</th>
+            <th>Arrivée</th>
+            <th>Durée</th>
+            <th>Direction</th>
+            <th>Jour</th>
+            <th>Arrêts</th>
+          </tr>
+        </thead>
+        <tbody>${rows || '<tr><td colspan="9" class="loading">Aucun départ pour ces filtres</td></tr>'}</tbody>
+      </table>
+    </div>
+  `;
+
+  document.getElementById('dayFilter').addEventListener('change', e => {
+    state.filterDay = e.target.value; renderMain();
+  });
+  document.getElementById('dirFilter').addEventListener('change', e => {
+    state.filterDir = e.target.value; renderMain();
+  });
+  document.getElementById('hourFilter').addEventListener('change', e => {
+    state.filterHour = e.target.value; renderMain();
+  });
+  document.getElementById('exportBtn').addEventListener('click', () => exportCsv(line, trips));
+
+  main.querySelectorAll('.dep-row').forEach(row => {
+    row.addEventListener('click', () => {
+      const tid = row.dataset.trip;
+      if (state.openTrips.has(tid)) state.openTrips.delete(tid);
+      else state.openTrips.add(tid);
+      renderMain();
+    });
+  });
+}
+
+function exportCsv(line, trips){
+  const cols = ['ligne','depart','arret_depart','terminus','arrivee','duree','direction','jour','nb_arrets','arrets_details'];
+  const rows = [cols.join(',')];
+  for (const t of trips){
+    const stops = t.stops || [];
+    const depTime = stops[0]?.dep || '';
+    const arrTime = stops[stops.length-1]?.arr || '';
+    const depStop = stops[0]?.stop || '';
+    const arrStop = stops[stops.length-1]?.stop || '';
+    const dur = duration(depTime, arrTime);
+    const details = stops.map(s => `${s.stop}(${s.arr || ''}-${s.dep || ''})`).join(' | ');
+    const row = [
+      line.code,
+      `"${depTime}"`,
+      `"${depStop.replace(/"/g,'""')}"`,
+      `"${arrStop.replace(/"/g,'""')}"`,
+      `"${arrTime}"`,
+      `"${formatDuration(dur)}"`,
+      `"${(t.headsign || '').replace(/"/g,'""')}"`,
+      `"${dayLabel(t.service_id)}"`,
+      stops.length,
+      `"${details.replace(/"/g,'""')}"`,
+    ];
+    rows.push(row.join(','));
+  }
+  const blob = new Blob([rows.join('\n')], {type:'text/csv;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `car-jaune-${line.code}-${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+load();
+</script>
+</body>
+</html>
