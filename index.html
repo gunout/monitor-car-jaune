@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🚌 Car Jaune 974 — Tous les départs</title>
+<title>🚌 Car Jaune 974 — Horaires interactifs</title>
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 :root{
@@ -22,102 +22,116 @@ body{font-family:var(--sans);background:var(--g50);color:var(--g900);
   var(--blue) 0%,var(--blue) 33%,var(--yellow) 33%,var(--yellow) 66%,
   var(--red) 66%,var(--red) 100%)}
 header{background:linear-gradient(135deg,var(--blue),var(--blue-hi));
-  color:var(--white);padding:16px 24px;position:sticky;top:6px;z-index:100;
+  color:var(--white);padding:14px 24px;position:sticky;top:6px;z-index:100;
   box-shadow:0 4px 12px rgba(0,85,164,.25)}
-h1{font-size:20px;font-weight:900;display:flex;align-items:center;
+header h1{font-size:18px;font-weight:900;display:flex;align-items:center;
   gap:12px;flex-wrap:wrap}
-h1 .badge{background:var(--yellow);color:var(--blue);padding:3px 10px;
-  border-radius:5px;font-family:var(--mono);font-size:12px;font-weight:800}
-.stats{margin-top:8px;display:flex;gap:10px;flex-wrap:wrap;
+header h1 .badge{background:var(--yellow);color:var(--blue);
+  padding:3px 10px;border-radius:5px;font-family:var(--mono);
+  font-size:11px;font-weight:800}
+.stats{margin-top:6px;display:flex;gap:8px;flex-wrap:wrap;
   font-family:var(--mono);font-size:11px}
-.stats span{background:rgba(255,255,255,.15);padding:4px 10px;border-radius:4px}
-.app{display:grid;grid-template-columns:200px 1fr;min-height:calc(100vh - 120px)}
+.stats span{background:rgba(255,255,255,.15);padding:3px 10px;border-radius:4px}
+.app{display:grid;grid-template-columns:180px 1fr;min-height:calc(100vh - 110px)}
 .sidebar{background:var(--white);border-right:1px solid var(--g200);
-  padding:14px 0;overflow-y:auto;max-height:calc(100vh - 120px);
-  position:sticky;top:110px;align-self:start}
-.sb-title{padding:0 14px 10px;font-size:10px;text-transform:uppercase;
+  padding:12px 0;overflow-y:auto;max-height:calc(100vh - 110px);
+  position:sticky;top:100px;align-self:start}
+.sb-title{padding:0 14px 8px;font-size:10px;text-transform:uppercase;
   letter-spacing:1.5px;color:var(--g500);font-family:var(--mono);
-  font-weight:700;border-bottom:1px solid var(--g100);margin-bottom:8px}
-.line-btn{display:flex;align-items:center;gap:8px;padding:8px 14px;
-  cursor:pointer;transition:all .15s;border-left:3px solid transparent;
+  font-weight:700;border-bottom:1px solid var(--g100);margin-bottom:6px}
+.sb-search{padding:6px 10px}
+.sb-search input{width:100%;padding:7px 10px;border:1px solid var(--g200);
+  border-radius:4px;font-size:12px;font-family:var(--sans)}
+.sb-search input:focus{outline:none;border-color:var(--blue)}
+.line-btn{display:flex;align-items:center;gap:8px;padding:7px 14px;
+  cursor:pointer;transition:all .1s;border-left:3px solid transparent;
   font-size:12px}
 .line-btn:hover{background:var(--blue-soft);border-left-color:var(--blue)}
 .line-btn.active{background:var(--blue-soft);border-left-color:var(--blue);
   font-weight:700}
 .line-code{background:var(--blue);color:var(--white);padding:2px 8px;
   border-radius:4px;font-family:var(--mono);font-size:11px;font-weight:800;
-  min-width:40px;text-align:center;flex-shrink:0}
+  min-width:38px;text-align:center;flex-shrink:0}
 .line-btn.active .line-code{background:var(--yellow);color:var(--blue)}
 .line-count{font-family:var(--mono);font-size:10px;color:var(--g500);
   margin-left:auto}
-.main{padding:20px 24px;overflow-y:auto;max-height:calc(100vh - 120px)}
+.main{padding:16px 20px;overflow-y:auto;max-height:calc(100vh - 110px)}
 
-.line-header{background:var(--white);border-radius:10px;padding:18px 20px;
-  margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.06);
+.line-header{background:var(--white);border-radius:10px;padding:16px 20px;
+  margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,.06);
   border-left:5px solid var(--blue)}
-.line-title{font-size:20px;font-weight:800;display:flex;
-  align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:10px}
+.line-title{font-size:18px;font-weight:800;display:flex;
+  align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:8px}
 .line-title .code{background:var(--blue);color:var(--white);
-  padding:6px 16px;border-radius:6px;font-family:var(--mono);
-  font-size:18px;font-weight:900}
-.line-info{display:flex;gap:8px;flex-wrap:wrap;font-family:var(--mono);
+  padding:5px 14px;border-radius:6px;font-family:var(--mono);
+  font-size:16px;font-weight:900}
+.line-info{display:flex;gap:6px;flex-wrap:wrap;font-family:var(--mono);
   font-size:11px;color:var(--g700)}
-.line-info span{background:var(--g50);padding:5px 12px;border-radius:4px;
+.line-info span{background:var(--g50);padding:4px 10px;border-radius:4px;
   border:1px solid var(--g200)}
 
-.filters{background:var(--white);border-radius:10px;padding:14px 20px;
-  margin-bottom:16px;display:flex;gap:12px;flex-wrap:wrap;
+/* Barre de recherche + filtres */
+.toolbar{background:var(--white);border-radius:10px;padding:12px 16px;
+  margin-bottom:14px;display:flex;gap:10px;flex-wrap:wrap;
   align-items:center;box-shadow:0 2px 8px rgba(0,0,0,.06)}
-.filters label{font-size:11px;color:var(--g700);font-weight:700;
-  text-transform:uppercase;letter-spacing:.5px;font-family:var(--mono)}
-.filters select,.filters input{padding:8px 12px;border:1px solid var(--g200);
-  border-radius:6px;font-size:13px;background:var(--white);
-  font-family:var(--sans);font-weight:600}
-.filters select:focus,.filters input:focus{outline:none;
-  border-color:var(--blue);box-shadow:0 0 0 3px var(--blue-soft)}
-.filters .count{font-family:var(--mono);font-size:12px;color:var(--blue);
-  font-weight:800;margin-left:auto;background:var(--blue-soft);
-  padding:6px 14px;border-radius:6px}
-.btn-export{background:var(--green);color:var(--white);border:none;
-  padding:8px 16px;border-radius:6px;cursor:pointer;font-size:12px;
-  font-weight:700;font-family:var(--sans);transition:all .15s}
-.btn-export:hover{background:#008a4c}
+.search-box{flex:1;min-width:200px;position:relative}
+.search-box input{width:100%;padding:9px 12px 9px 34px;
+  border:1px solid var(--g200);border-radius:6px;font-size:13px;
+  font-family:var(--sans)}
+.search-box input:focus{outline:none;border-color:var(--blue);
+  box-shadow:0 0 0 3px var(--blue-soft)}
+.search-box::before{content:'🔍';position:absolute;left:10px;top:50%;
+  transform:translateY(-50%);font-size:13px;opacity:.6;pointer-events:none}
+.toolbar select{padding:8px 10px;border:1px solid var(--g200);
+  border-radius:6px;font-size:12px;background:var(--white);
+  font-family:var(--sans);font-weight:600;cursor:pointer}
+.toolbar select:focus{outline:none;border-color:var(--blue);
+  box-shadow:0 0 0 3px var(--blue-soft)}
+.toolbar .count{font-family:var(--mono);font-size:11px;color:var(--blue);
+  font-weight:800;background:var(--blue-soft);padding:6px 12px;
+  border-radius:6px;margin-left:auto}
+.btn{background:var(--white);color:var(--g700);border:1px solid var(--g200);
+  padding:8px 12px;border-radius:6px;cursor:pointer;font-size:12px;
+  font-weight:600;font-family:var(--sans);transition:all .15s;
+  white-space:nowrap}
+.btn:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-soft)}
+.btn.primary{background:var(--green);color:var(--white);border-color:var(--green)}
+.btn.primary:hover{background:#008a4c;border-color:#008a4c;color:var(--white)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
 
-/* Tableau principal */
+/* Tableau */
 .tbl-wrap{background:var(--white);border-radius:10px;overflow:hidden;
   box-shadow:0 2px 8px rgba(0,0,0,.06);overflow-x:auto}
 table{width:100%;border-collapse:collapse;font-size:12px}
 thead{background:var(--g50);position:sticky;top:0;z-index:10}
-thead th{padding:12px 14px;text-align:left;font-family:var(--mono);
+thead th{padding:10px 12px;text-align:left;font-family:var(--mono);
   font-size:10px;text-transform:uppercase;letter-spacing:1px;
   color:var(--g500);font-weight:700;border-bottom:2px solid var(--g200);
-  white-space:nowrap}
+  white-space:nowrap;cursor:pointer;user-select:none;
+  transition:background .15s}
+thead th:hover{background:var(--blue-soft);color:var(--blue)}
+thead th.sorted::after{content:' ▲';color:var(--blue);font-size:9px}
+thead th.sorted.desc::after{content:' ▼'}
 tbody tr{border-bottom:1px solid var(--g100);transition:all .1s}
-tbody tr:hover{background:var(--blue-soft)}
+tbody tr.dep-row:hover{background:var(--blue-soft)}
 tbody tr.dep-row{cursor:pointer;font-weight:600}
 tbody tr.dep-row.open{background:var(--blue-soft)}
-tbody td{padding:11px 14px;vertical-align:middle}
-td.dep{font-family:var(--mono);font-size:15px;font-weight:800;
-  color:var(--blue)}
-td.arr{font-family:var(--mono);font-size:15px;font-weight:800;
-  color:var(--green)}
+tbody td{padding:10px 12px;vertical-align:middle}
+td.dep{font-family:var(--mono);font-size:14px;font-weight:800;color:var(--blue)}
+td.arr{font-family:var(--mono);font-size:14px;font-weight:800;color:var(--green)}
 td.dur{font-family:var(--mono);font-size:11px;color:var(--g700);
-  background:var(--g50);border-radius:4px;text-align:center;
-  font-weight:700}
+  background:var(--g50);border-radius:4px;text-align:center;font-weight:700}
 td.terminus{font-size:12px;color:var(--g900);font-weight:600}
 td.headsign{font-size:11px;color:var(--g500);font-family:var(--mono)}
-td.day{font-family:var(--mono);font-size:10px;font-weight:800;
-  text-align:center;padding:3px 8px;border-radius:3px;
-  background:var(--g100);color:var(--g700);
-  display:inline-block}
-td.day.week{background:var(--blue-soft);color:var(--blue)}
-td.day.sat{background:var(--yellow-soft);color:#8a5e00}
-td.day.sun{background:var(--red-soft);color:var(--red)}
-td.nstops{font-family:var(--mono);font-size:11px;color:var(--g500);
-  text-align:center}
+td.day{text-align:center}
+td.day span{font-family:var(--mono);font-size:10px;font-weight:800;
+  padding:3px 8px;border-radius:3px;background:var(--g100);color:var(--g700)}
+td.day span.week{background:var(--blue-soft);color:var(--blue)}
+td.day span.sat{background:var(--yellow-soft);color:#8a5e00}
+td.day span.sun{background:var(--red-soft);color:var(--red)}
+td.nstops{font-family:var(--mono);font-size:11px;color:var(--g500);text-align:center}
 td.arrow{color:var(--blue);font-weight:800;text-align:center;width:30px}
 
-/* Détail déplié — tableau des arrêts */
 tr.detail-row td{padding:0;background:var(--g50);
   border-bottom:2px solid var(--blue)}
 .detail-inner{padding:14px 20px}
@@ -128,7 +142,9 @@ table.stops{width:100%;border-collapse:collapse;font-size:12px;
   background:var(--white);border-radius:6px;overflow:hidden}
 table.stops th{background:var(--g100);padding:8px 12px;text-align:left;
   font-family:var(--mono);font-size:10px;color:var(--g700);
-  font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+  font-weight:700;text-transform:uppercase;letter-spacing:.5px;
+  cursor:default}
+table.stops th:hover{background:var(--g100);color:var(--g700)}
 table.stops td{padding:8px 12px;border-bottom:1px solid var(--g100)}
 table.stops tr:last-child td{border-bottom:none}
 table.stops .n{font-family:var(--mono);font-size:10px;color:var(--g500);
@@ -143,6 +159,27 @@ table.stops tr.terminus-row .s{font-weight:800;color:var(--green)}
 table.stops tr.depart-row{background:var(--blue-soft)}
 table.stops tr.depart-row .s{font-weight:800;color:var(--blue)}
 
+/* Pagination */
+.pagination{display:flex;gap:6px;align-items:center;justify-content:center;
+  padding:14px;background:var(--white);margin-top:12px;border-radius:10px;
+  box-shadow:0 2px 8px rgba(0,0,0,.06);flex-wrap:wrap}
+.pagination button{background:var(--white);border:1px solid var(--g200);
+  color:var(--g700);padding:6px 12px;border-radius:4px;cursor:pointer;
+  font-size:12px;font-weight:600;font-family:var(--sans);transition:all .15s}
+.pagination button:hover:not(:disabled){border-color:var(--blue);
+  color:var(--blue);background:var(--blue-soft)}
+.pagination button:disabled{opacity:.3;cursor:not-allowed}
+.pagination button.active{background:var(--blue);color:var(--white);
+  border-color:var(--blue)}
+.pagination .info{font-family:var(--mono);font-size:11px;
+  color:var(--g700);padding:0 10px}
+.pagination .size-sel{padding:6px 8px;border:1px solid var(--g200);
+  border-radius:4px;font-size:11px;font-family:var(--sans)}
+
+/* Highlight recherche */
+mark{background:var(--yellow);color:var(--g900);padding:0 2px;
+  border-radius:2px;font-weight:700}
+
 .loading{text-align:center;padding:60px;color:var(--g500)}
 .spin{width:40px;height:40px;border:3px solid var(--g200);
   border-top-color:var(--blue);border-radius:50%;
@@ -152,26 +189,36 @@ table.stops tr.depart-row .s{font-weight:800;color:var(--blue)}
   border-left:4px solid var(--red);padding:20px;border-radius:6px;
   color:var(--red);margin:20px;font-size:13px}
 
+.kbd{display:inline-block;background:var(--g100);border:1px solid var(--g200);
+  border-radius:3px;padding:1px 6px;font-family:var(--mono);font-size:10px;
+  color:var(--g700);font-weight:700}
+.hint{font-family:var(--mono);font-size:10px;color:var(--g500);
+  text-align:center;padding:10px}
+
 @media(max-width:900px){
   .app{grid-template-columns:1fr}
-  .sidebar{position:static;max-height:200px;border-right:none;
+  .sidebar{position:static;max-height:180px;border-right:none;
     border-bottom:1px solid var(--g200)}
   .main{max-height:none}
   thead th:nth-child(4),tbody td:nth-child(4),
-  thead th:nth-child(6),tbody td:nth-child(6){display:none}
+  thead th:nth-child(6),tbody td:nth-child(6),
+  thead th:nth-child(7),tbody td:nth-child(7){display:none}
 }
 </style>
 </head>
 <body>
 <div class="band"></div>
 <header>
-  <h1>🚌 CAR JAUNE 974 <span class="badge">TOUS LES DÉPARTS 2025</span></h1>
+  <h1>🚌 CAR JAUNE 974 <span class="badge">HORAIRES 2025</span></h1>
   <div class="stats" id="headerStats">Chargement…</div>
 </header>
 
 <div class="app">
   <aside class="sidebar">
     <div class="sb-title">Lignes</div>
+    <div class="sb-search">
+      <input type="text" id="lineSearch" placeholder="Filtrer les lignes…" autocomplete="off">
+    </div>
     <div id="lineList"></div>
   </aside>
   <main class="main" id="main">
@@ -181,48 +228,41 @@ table.stops tr.depart-row .s{font-weight:800;color:var(--blue)}
 
 <script>
 const DATA_URL = 'data/car_jaune_full.json';
-const state = { data:null, lines:[], selected:null, filterDay:'all', filterDir:'all', filterHour:'all', openTrips:new Set() };
+const PAGE_SIZE_DEFAULT = 50;
+
+const state = {
+  data: null,
+  lines: [],
+  selected: null,
+  lineSearch: '',
+  search: '',
+  filterDay: 'all',
+  filterDir: 'all',
+  filterHour: 'all',
+  sortKey: 'dep',
+  sortDir: 'asc',
+  page: 1,
+  pageSize: PAGE_SIZE_DEFAULT,
+  openTrips: new Set(),
+};
 
 function esc(s){ return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-
-function parseHM(t){
-  if (!t) return null;
-  const [h,m] = t.split(':').map(Number);
-  if (isNaN(h) || isNaN(m)) return null;
-  return h*60 + m;
+function normalize(s){ return String(s ?? '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim(); }
+function highlight(text, query){
+  if (!query) return esc(text);
+  const t = String(text ?? '');
+  const n = normalize(t);
+  const q = normalize(query);
+  const idx = n.indexOf(q);
+  if (idx === -1) return esc(t);
+  return esc(t.slice(0, idx)) + '<mark>' + esc(t.slice(idx, idx + q.length)) + '</mark>' + esc(t.slice(idx + q.length));
 }
-function formatHM(min){
-  if (min == null) return '—';
-  const h = Math.floor(min/60) % 24;
-  const m = min % 60;
-  return String(h).padStart(2,'0') + ':' + String(m).padStart(2,'0');
-}
-function duration(from, to){
-  const a = parseHM(from), b = parseHM(to);
-  if (a == null || b == null) return null;
-  let d = b - a;
-  if (d < 0) d += 24*60;
-  return d;
-}
-function formatDuration(min){
-  if (min == null) return '—';
-  if (min < 60) return min + ' min';
-  const h = Math.floor(min/60);
-  const m = min % 60;
-  return m === 0 ? h + 'h' : h + 'h' + String(m).padStart(2,'0');
-}
-function dayClass(sid){
-  const s = (sid || '').toLowerCase();
-  if (s.includes('dim') || s.includes('sun') || s.includes('df')) return 'sun';
-  if (s.includes('sam') || s.includes('sat')) return 'sat';
-  return 'week';
-}
-function dayLabel(sid){
-  const s = (sid || '').toLowerCase();
-  if (s.includes('dim') || s.includes('sun') || s.includes('df')) return 'Dim';
-  if (s.includes('sam') || s.includes('sat')) return 'Sam';
-  return 'Sem';
-}
+function parseHM(t){ if (!t) return null; const [h,m] = t.split(':').map(Number); if (isNaN(h)||isNaN(m)) return null; return h*60+m; }
+function formatHM(min){ if (min == null) return '—'; return String(Math.floor(min/60)%24).padStart(2,'0') + ':' + String(min%60).padStart(2,'0'); }
+function duration(from, to){ const a = parseHM(from), b = parseHM(to); if (a==null||b==null) return null; let d = b-a; if (d<0) d += 1440; return d; }
+function formatDuration(min){ if (min==null) return '—'; if (min<60) return min+' min'; const h = Math.floor(min/60); const m = min%60; return m===0 ? h+'h' : h+'h'+String(m).padStart(2,'0'); }
+function dayClass(sid){ const s = (sid||'').toLowerCase(); if (s.includes('dim')||s.includes('sun')||s.includes('df')) return 'sun'; if (s.includes('sam')||s.includes('sat')) return 'sat'; return 'week'; }
+function dayLabel(sid){ const s = (sid||'').toLowerCase(); if (s.includes('dim')||s.includes('sun')||s.includes('df')) return 'Dim'; if (s.includes('sam')||s.includes('sat')) return 'Sam'; return 'Sem'; }
 
 async function load(){
   const main = document.getElementById('main');
@@ -262,12 +302,14 @@ function renderHeader(){
 
 function renderSidebar(){
   const list = document.getElementById('lineList');
-  list.innerHTML = state.lines.map(l => `
+  const q = normalize(state.lineSearch);
+  const lines = state.lines.filter(l => !q || normalize(l.code + ' ' + l.name).includes(q));
+  list.innerHTML = lines.map(l => `
     <div class="line-btn ${l.code === state.selected ? 'active' : ''}" data-code="${esc(l.code)}">
       <span class="line-code">${esc(l.code)}</span>
       <span class="line-count">${l.trips_count}</span>
     </div>
-  `).join('');
+  `).join('') || '<div style="padding:14px;text-align:center;color:var(--g500);font-size:11px">Aucune ligne</div>';
   list.querySelectorAll('.line-btn').forEach(el => {
     el.addEventListener('click', () => selectLine(el.dataset.code));
   });
@@ -275,12 +317,72 @@ function renderSidebar(){
 
 function selectLine(code){
   state.selected = code;
+  state.search = '';
   state.filterDay = 'all';
   state.filterDir = 'all';
   state.filterHour = 'all';
+  state.sortKey = 'dep';
+  state.sortDir = 'asc';
+  state.page = 1;
   state.openTrips.clear();
   renderSidebar();
   renderMain();
+}
+
+function getFilteredTrips(line){
+  let trips = line.departures.map(t => {
+    const stops = t.stops || [];
+    const dep = stops[0]?.dep || '';
+    const arr = stops[stops.length-1]?.arr || '';
+    return {
+      ...t,
+      _dep: dep,
+      _arr: arr,
+      _depStop: stops[0]?.stop || '',
+      _arrStop: stops[stops.length-1]?.stop || '',
+      _dur: duration(dep, arr),
+      _nstops: stops.length,
+      _day: dayClass(t.service_id),
+      _dayLabel: dayLabel(t.service_id),
+    };
+  });
+
+  if (state.filterDay !== 'all') trips = trips.filter(t => t._day === state.filterDay);
+  if (state.filterDir !== 'all') trips = trips.filter(t => t.headsign === state.filterDir);
+  if (state.filterHour !== 'all') {
+    trips = trips.filter(t => {
+      const h = parseInt((t._dep || '00:00').split(':')[0]);
+      if (state.filterHour === 'morning') return h >= 5 && h < 12;
+      if (state.filterHour === 'afternoon') return h >= 12 && h < 18;
+      if (state.filterHour === 'evening') return h >= 18 && h < 24;
+      return true;
+    });
+  }
+  if (state.search){
+    const q = normalize(state.search);
+    trips = trips.filter(t => {
+      const hay = normalize([t._depStop, t._arrStop, t.headsign, t._dep, t._arr].join(' '));
+      return hay.includes(q);
+    });
+  }
+
+  const key = state.sortKey, dir = state.sortDir === 'asc' ? 1 : -1;
+  trips.sort((a,b) => {
+    let va, vb;
+    if (key === 'dep'){ va = parseHM(a._dep) ?? 9999; vb = parseHM(b._dep) ?? 9999; }
+    else if (key === 'arr'){ va = parseHM(a._arr) ?? 9999; vb = parseHM(b._arr) ?? 9999; }
+    else if (key === 'dur'){ va = a._dur ?? 9999; vb = b._dur ?? 9999; }
+    else if (key === 'depStop'){ va = a._depStop; vb = b._depStop; }
+    else if (key === 'arrStop'){ va = a._arrStop; vb = b._arrStop; }
+    else if (key === 'headsign'){ va = a.headsign || ''; vb = b.headsign || ''; }
+    else if (key === 'day'){ va = a._day; vb = b._day; }
+    else if (key === 'nstops'){ va = a._nstops; vb = b._nstops; }
+    else { va = a._dep; vb = b._dep; }
+    if (typeof va === 'string') return va.localeCompare(vb) * dir;
+    return (va - vb) * dir;
+  });
+
+  return trips;
 }
 
 function renderMain(){
@@ -288,43 +390,30 @@ function renderMain(){
   const line = state.lines.find(l => l.code === state.selected);
   if (!line){ main.innerHTML = ''; return; }
 
-  // Filtres
-  let trips = line.departures;
-  if (state.filterDay !== 'all') trips = trips.filter(t => dayClass(t.service_id) === state.filterDay);
-  if (state.filterDir !== 'all') trips = trips.filter(t => t.headsign === state.filterDir);
-  if (state.filterHour !== 'all') {
-    trips = trips.filter(t => {
-      const h = parseInt((t.first_departure || '00:00').split(':')[0]);
-      if (state.filterHour === 'morning') return h >= 5 && h < 12;
-      if (state.filterHour === 'afternoon') return h >= 12 && h < 18;
-      if (state.filterHour === 'evening') return h >= 18 && h < 24;
-      return true;
-    });
-  }
+  const trips = getFilteredTrips(line);
+  const totalPages = Math.max(1, Math.ceil(trips.length / state.pageSize));
+  if (state.page > totalPages) state.page = totalPages;
+  const start = (state.page - 1) * state.pageSize;
+  const end = start + state.pageSize;
+  const pageTrips = trips.slice(start, end);
 
   const dirs = [...new Set(line.departures.map(d => d.headsign).filter(Boolean))].sort();
   const dirsOpts = dirs.map(d =>
     `<option value="${esc(d)}" ${state.filterDir === d ? 'selected':''}>${esc(d)}</option>`
   ).join('');
 
-  const rows = trips.map((t, i) => {
-    const stops = t.stops || [];
-    const depTime = stops[0]?.dep || '';
-    const arrTime = stops[stops.length-1]?.arr || '';
-    const depStop = stops[0]?.stop || '';
-    const arrStop = stops[stops.length-1]?.stop || '';
-    const dur = duration(depTime, arrTime);
-    const dClass = dayClass(t.service_id);
-    const isOpen = state.openTrips.has(t.trip_id);
+  const sortClass = (k) => state.sortKey === k ? `sorted${state.sortDir === 'desc' ? ' desc' : ''}` : '';
 
-    const stopRows = stops.map((s, j) => {
-      const isTerminus = j === stops.length - 1;
+  const rows = pageTrips.map((t, i) => {
+    const isOpen = state.openTrips.has(t.trip_id);
+    const stopRows = (t.stops || []).map((s, j) => {
+      const isTerminus = j === t.stops.length - 1;
       const isDepart = j === 0;
       const rowClass = isTerminus ? 'terminus-row' : (isDepart ? 'depart-row' : '');
       return `
         <tr class="${rowClass}">
           <td class="n">${String(j+1).padStart(2,'0')}</td>
-          <td class="s">${esc(s.stop)}${isTerminus ? ' 🏁' : (isDepart ? ' 🚏' : '')}</td>
+          <td class="s">${highlight(s.stop, state.search)}${isTerminus ? ' 🏁' : (isDepart ? ' 🚏' : '')}</td>
           <td class="a">${esc(s.arr || '—')}</td>
           <td class="d">${esc(s.dep || '—')}</td>
         </tr>
@@ -333,15 +422,15 @@ function renderMain(){
 
     return `
       <tr class="dep-row ${isOpen ? 'open' : ''}" data-trip="${esc(t.trip_id)}">
-        <td class="dep">${esc(depTime || '—')}</td>
-        <td class="terminus" title="${esc(depStop)}">${esc(depStop)}</td>
+        <td class="dep">${esc(t._dep || '—')}</td>
+        <td class="terminus">${highlight(t._depStop, state.search)}</td>
         <td class="arrow">→</td>
-        <td class="terminus" title="${esc(arrStop)}">${esc(arrStop)}</td>
-        <td class="arr">${esc(arrTime || '—')}</td>
-        <td class="dur">${formatDuration(dur)}</td>
+        <td class="terminus">${highlight(t._arrStop, state.search)}</td>
+        <td class="arr">${esc(t._arr || '—')}</td>
+        <td class="dur">${formatDuration(t._dur)}</td>
         <td class="headsign">${esc(t.headsign || '—')}</td>
-        <td><span class="day ${dClass}">${dayLabel(t.service_id)}</span></td>
-        <td class="nstops">${stops.length}</td>
+        <td class="day"><span class="${t._day}">${t._dayLabel}</span></td>
+        <td class="nstops">${t._nstops}</td>
       </tr>
       ${isOpen ? `
       <tr class="detail-row">
@@ -365,6 +454,42 @@ function renderMain(){
     `;
   }).join('');
 
+  // Pagination
+  let paginationHtml = '';
+  if (totalPages > 1){
+    const btn = (p, label, disabled) =>
+      `<button data-page="${p}" ${disabled ? 'disabled' : ''}>${label}</button>`;
+    const pageNums = [];
+    const range = 2;
+    for (let p = 1; p <= totalPages; p++){
+      if (p === 1 || p === totalPages || (p >= state.page - range && p <= state.page + range)){
+        pageNums.push(p);
+      } else if (pageNums[pageNums.length-1] !== '...'){
+        pageNums.push('...');
+      }
+    }
+    paginationHtml = `
+      <div class="pagination">
+        ${btn(1, '⏮', state.page === 1)}
+        ${btn(state.page - 1, '←', state.page === 1)}
+        ${pageNums.map(p => p === '...'
+          ? '<span class="info">…</span>'
+          : `<button data-page="${p}" class="${p === state.page ? 'active' : ''}">${p}</button>`
+        ).join('')}
+        ${btn(state.page + 1, '→', state.page === totalPages)}
+        ${btn(totalPages, '⏭', state.page === totalPages)}
+        <span class="info">Page ${state.page} / ${totalPages}</span>
+        <select class="size-sel" id="pageSize">
+          <option value="25" ${state.pageSize===25?'selected':''}>25 / page</option>
+          <option value="50" ${state.pageSize===50?'selected':''}>50 / page</option>
+          <option value="100" ${state.pageSize===100?'selected':''}>100 / page</option>
+          <option value="200" ${state.pageSize===200?'selected':''}>200 / page</option>
+          <option value="9999" ${state.pageSize===9999?'selected':''}>Tout</option>
+        </select>
+      </div>
+    `;
+  }
+
   main.innerHTML = `
     <div class="line-header">
       <div class="line-title">
@@ -378,60 +503,84 @@ function renderMain(){
       </div>
     </div>
 
-    <div class="filters">
-      <label>Jour :</label>
+    <div class="toolbar">
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Rechercher un arrêt, une ville, une direction…" value="${esc(state.search)}" autocomplete="off">
+      </div>
       <select id="dayFilter">
-        <option value="all" ${state.filterDay==='all'?'selected':''}>Tous</option>
-        <option value="week" ${state.filterDay==='week'?'selected':''}>Semaine</option>
-        <option value="sat" ${state.filterDay==='sat'?'selected':''}>Samedi</option>
-        <option value="sun" ${state.filterDay==='sun'?'selected':''}>Dimanche</option>
+        <option value="all" ${state.filterDay==='all'?'selected':''}>📅 Tous les jours</option>
+        <option value="week" ${state.filterDay==='week'?'selected':''}>📅 Semaine</option>
+        <option value="sat" ${state.filterDay==='sat'?'selected':''}>📅 Samedi</option>
+        <option value="sun" ${state.filterDay==='sun'?'selected':''}>📅 Dimanche</option>
       </select>
-      <label>Direction :</label>
       <select id="dirFilter">
-        <option value="all" ${state.filterDir==='all'?'selected':''}>Toutes</option>
+        <option value="all" ${state.filterDir==='all'?'selected':''}>🧭 Toutes directions</option>
         ${dirsOpts}
       </select>
-      <label>Moment :</label>
       <select id="hourFilter">
-        <option value="all" ${state.filterHour==='all'?'selected':''}>Toute la journée</option>
-        <option value="morning" ${state.filterHour==='morning'?'selected':''}>Matin (5h-12h)</option>
-        <option value="afternoon" ${state.filterHour==='afternoon'?'selected':''}>Après-midi (12h-18h)</option>
-        <option value="evening" ${state.filterHour==='evening'?'selected':''}>Soir (18h-24h)</option>
+        <option value="all" ${state.filterHour==='all'?'selected':''}>🕐 Toute la journée</option>
+        <option value="morning" ${state.filterHour==='morning'?'selected':''}>🌅 Matin (5-12h)</option>
+        <option value="afternoon" ${state.filterHour==='afternoon'?'selected':''}>☀️ Après-midi (12-18h)</option>
+        <option value="evening" ${state.filterHour==='evening'?'selected':''}>🌙 Soir (18-24h)</option>
       </select>
-      <button class="btn-export" id="exportBtn">📥 Export CSV</button>
-      <span class="count">${trips.length} / ${line.trips_count} départs</span>
+      <button class="btn primary" id="exportBtn">📥 Export CSV</button>
+      <span class="count">${trips.length} / ${line.trips_count}</span>
     </div>
 
     <div class="tbl-wrap">
       <table>
         <thead>
           <tr>
-            <th>Départ</th>
-            <th>Arrêt de départ</th>
+            <th data-sort="dep" class="${sortClass('dep')}">Départ</th>
+            <th data-sort="depStop" class="${sortClass('depStop')}">Arrêt de départ</th>
             <th></th>
-            <th>Terminus</th>
-            <th>Arrivée</th>
-            <th>Durée</th>
-            <th>Direction</th>
-            <th>Jour</th>
-            <th>Arrêts</th>
+            <th data-sort="arrStop" class="${sortClass('arrStop')}">Terminus</th>
+            <th data-sort="arr" class="${sortClass('arr')}">Arrivée</th>
+            <th data-sort="dur" class="${sortClass('dur')}">Durée</th>
+            <th data-sort="headsign" class="${sortClass('headsign')}">Direction</th>
+            <th data-sort="day" class="${sortClass('day')}">Jour</th>
+            <th data-sort="nstops" class="${sortClass('nstops')}">Arrêts</th>
           </tr>
         </thead>
         <tbody>${rows || '<tr><td colspan="9" class="loading">Aucun départ pour ces filtres</td></tr>'}</tbody>
       </table>
     </div>
+
+    ${paginationHtml}
+
+    <div class="hint">
+      💡 <span class="kbd">/</span> pour rechercher ·
+      <span class="kbd">←</span> <span class="kbd">→</span> pour paginer ·
+      Clic sur en-tête pour trier ·
+      Clic sur un départ pour voir les arrêts
+    </div>
   `;
 
+  // Event listeners
+  document.getElementById('searchInput').addEventListener('input', e => {
+    state.search = e.target.value;
+    state.page = 1;
+    renderMain();
+  });
   document.getElementById('dayFilter').addEventListener('change', e => {
-    state.filterDay = e.target.value; renderMain();
+    state.filterDay = e.target.value; state.page = 1; renderMain();
   });
   document.getElementById('dirFilter').addEventListener('change', e => {
-    state.filterDir = e.target.value; renderMain();
+    state.filterDir = e.target.value; state.page = 1; renderMain();
   });
   document.getElementById('hourFilter').addEventListener('change', e => {
-    state.filterHour = e.target.value; renderMain();
+    state.filterHour = e.target.value; state.page = 1; renderMain();
   });
   document.getElementById('exportBtn').addEventListener('click', () => exportCsv(line, trips));
+
+  main.querySelectorAll('thead th[data-sort]').forEach(th => {
+    th.addEventListener('click', () => {
+      const k = th.dataset.sort;
+      if (state.sortKey === k) state.sortDir = state.sortDir === 'asc' ? 'desc' : 'asc';
+      else { state.sortKey = k; state.sortDir = 'asc'; }
+      renderMain();
+    });
+  });
 
   main.querySelectorAll('.dep-row').forEach(row => {
     row.addEventListener('click', () => {
@@ -441,32 +590,38 @@ function renderMain(){
       renderMain();
     });
   });
+
+  main.querySelectorAll('.pagination button[data-page]').forEach(b => {
+    b.addEventListener('click', () => {
+      const p = parseInt(b.dataset.page);
+      if (p >= 1 && p <= totalPages){ state.page = p; renderMain(); }
+    });
+  });
+  const sizeSel = document.getElementById('pageSize');
+  if (sizeSel) sizeSel.addEventListener('change', e => {
+    state.pageSize = parseInt(e.target.value);
+    state.page = 1;
+    renderMain();
+  });
 }
 
 function exportCsv(line, trips){
   const cols = ['ligne','depart','arret_depart','terminus','arrivee','duree','direction','jour','nb_arrets','arrets_details'];
   const rows = [cols.join(',')];
   for (const t of trips){
-    const stops = t.stops || [];
-    const depTime = stops[0]?.dep || '';
-    const arrTime = stops[stops.length-1]?.arr || '';
-    const depStop = stops[0]?.stop || '';
-    const arrStop = stops[stops.length-1]?.stop || '';
-    const dur = duration(depTime, arrTime);
-    const details = stops.map(s => `${s.stop}(${s.arr || ''}-${s.dep || ''})`).join(' | ');
-    const row = [
+    const details = (t.stops || []).map(s => `${s.stop}(${s.arr||''}-${s.dep||''})`).join(' | ');
+    rows.push([
       line.code,
-      `"${depTime}"`,
-      `"${depStop.replace(/"/g,'""')}"`,
-      `"${arrStop.replace(/"/g,'""')}"`,
-      `"${arrTime}"`,
-      `"${formatDuration(dur)}"`,
-      `"${(t.headsign || '').replace(/"/g,'""')}"`,
-      `"${dayLabel(t.service_id)}"`,
-      stops.length,
+      `"${t._dep}"`,
+      `"${(t._depStop||'').replace(/"/g,'""')}"`,
+      `"${(t._arrStop||'').replace(/"/g,'""')}"`,
+      `"${t._arr}"`,
+      `"${formatDuration(t._dur)}"`,
+      `"${(t.headsign||'').replace(/"/g,'""')}"`,
+      `"${t._dayLabel}"`,
+      t._nstops,
       `"${details.replace(/"/g,'""')}"`,
-    ];
-    rows.push(row.join(','));
+    ].join(','));
   }
   const blob = new Blob([rows.join('\n')], {type:'text/csv;charset=utf-8'});
   const url = URL.createObjectURL(blob);
@@ -476,6 +631,21 @@ function exportCsv(line, trips){
   a.click();
   URL.revokeObjectURL(url);
 }
+
+// Recherche dans la sidebar
+document.getElementById('lineSearch').addEventListener('input', e => {
+  state.lineSearch = e.target.value;
+  renderSidebar();
+});
+
+// Raccourcis clavier
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
+  if (e.key === '/'){ e.preventDefault(); document.getElementById('searchInput')?.focus(); }
+  if (e.key === 'ArrowLeft' && state.page > 1){ state.page--; renderMain(); }
+  if (e.key === 'ArrowRight'){ state.page++; renderMain(); }
+  if (e.key === 'Escape'){ state.search = ''; renderMain(); }
+});
 
 load();
 </script>
