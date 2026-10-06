@@ -143,6 +143,24 @@ def main():
             })
 
         # Trier par heure de départ
+        # ─── DÉDUPLICATION : même heure + mêmes arrêts + même sens ───
+        seen = set()
+        unique_departures = []
+        for d in departures:
+            stops_sig = "|".join(s["stop"] for s in d["stops"][:3])
+            key = (
+                d["first_departure"],
+                d["last_arrival"],
+                d["headsign"],
+                d["service_id"],
+                stops_sig,
+                len(d["stops"]),
+            )
+            if key not in seen:
+                seen.add(key)
+                unique_departures.append(d)
+        departures = unique_departures
+
         departures.sort(key=lambda d: d["first_departure"])
 
         directions = sorted({d["headsign"] for d in departures if d["headsign"]})
