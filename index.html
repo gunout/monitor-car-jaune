@@ -504,6 +504,7 @@ const state = {
   filterDay: 'all',
   filterDir: 'all',
   filterHour: 'all',
+  filterService: 'all',
   sortKey: 'dep',
   sortDir: 'asc',
   page: 1,
@@ -531,13 +532,25 @@ function formatHM(t){
 function parseHM(t){ if (!t) return null; const [h,m] = t.split(':').map(Number); if (isNaN(h)||isNaN(m)) return null; return h*60+m; }
 function formatDuration(min){ if (min==null) return '—'; if (min<60) return min+' min'; const h = Math.floor(min/60); const m = min%60; return m===0 ? h+'h' : h+'h'+String(m).padStart(2,'0'); }
 function duration(from, to){ const a = parseHM(from), b = parseHM(to); if (a==null||b==null) return null; let d = b-a; if (d<0) d += 1440; return d; }
-function dayClass(sid){ const s = (sid||'').toLowerCase(); if (s.includes('dim')||s.includes('sun')||s.includes('df')) return 'sun'; if (s.includes('sam')||s.includes('sat')) return 'sat'; return 'week'; }
-function dayLabel(sid){ const s = (sid||'').toLowerCase(); if (s.includes('dim')||s.includes('sun')||s.includes('df')) return 'Dim'; if (s.includes('sam')||s.includes('sat')) return 'Sam'; return 'Sem'; }
-function dayClassOf(sid){
-  const s = (sid||'').toLowerCase();
-  if (s.includes('dim')||s.includes('sun')||s.includes('df')) return 'sun';
-  if (s.includes('sam')||s.includes('sat')) return 'sat';
+function dayClass(sid){
+  const svc = state.data?.services?.[String(sid)];
+  if (!svc) return 'week';
+  const days = svc.days || [];
+  const weekdays = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven'];
+  const hasWeek = days.some(d => weekdays.includes(d));
+  const hasSat = days.includes('Sam');
+  const hasSun = days.includes('Dim');
+  if (hasWeek) return 'week';
+  if (hasSat) return 'sat';
+  if (hasSun) return 'sun';
   return 'week';
+}
+
+function dayLabel(sid){
+  const cls = dayClass(sid);
+  if (cls === 'sun') return 'Dim';
+  if (cls === 'sat') return 'Sam';
+  return 'Sem';
 }
 
 function getZone(code){
@@ -591,6 +604,17 @@ async function load(){
     if (!r.ok) throw new Error('HTTP ' + r.status);
     const data = await r.json();
     state.data = data;
+
+    // Filtre automatique par le jour actuel
+
+    const _today = new Date().getDay();
+
+    state.filterDay = _today === 0 ? 'sun' : (_today === 6 ? 'sat' : 'week');
+    // Filtrer automatiquement par le jour actuel
+    const today = new Date().getDay();
+    if (today === 0) state.filterDay = 'sun';
+    else if (today === 6) state.filterDay = 'sat';
+    else state.filterDay = 'week';
     state.lines = (data.lines || []).sort((a,b)=>{
       const re = /^([A-Z]+)(\d*)(X?)$/;
       const ma = a.code.match(re), mb = b.code.match(re);
@@ -645,9 +669,12 @@ function renderSidebar(){
 function selectLine(code){
   state.selected = code;
   state.search = '';
-  state.filterDay = 'all';
+  // Ré-appliquer le filtre jour actuel
+  const _t = new Date().getDay();
+  state.filterDay = _t === 0 ? 'sun' : (_t === 6 ? 'sat' : 'week');
   state.filterDir = 'all';
   state.filterHour = 'all';
+  state.filterService = 'all';
   state.sortKey = 'dep';
   state.sortDir = 'asc';
   state.page = 1;
@@ -674,7 +701,20 @@ function getFilteredTrips(line){
     };
   });
 
-  if (state.filterDay !== 'all') trips = trips.filter(t => t._day === state.filterDay);
+  if (state.filterDay !== 'all') {
+    trips = trips.filter(t => t._day === state.filterDay);
+    const _seen = new Set();
+    trips = trips.filter(t => {
+      const _k = `${t._dep}|${t._arr}|${t.headsign}|${t._nstops}`;
+      if (_seen.has(_k)) return false;
+      _seen.add(_k);
+      return true;
+    });
+  }
+
+  if (state.filterService !== 'all') {
+    trips = trips.filter(t => t.service_id === state.filterService);
+  }
   if (state.filterDir !== 'all') trips = trips.filter(t => t.headsign === state.filterDir);
   if (state.filterHour !== 'all') {
     trips = trips.filter(t => {
@@ -713,6 +753,13 @@ function getFilteredTrips(line){
 }
 
 function renderMain(){
+  // Forcer le filtre jour si 'all' (premier rendu)
+  if (state.filterDay === 'all' && !state._filterSet) {
+    const _t = new Date().getDay();
+    state.filterDay = _t === 0 ? 'sun' : (_t === 6 ? 'sat' : 'week');
+    state._filterSet = true;
+  }
+
   const main = document.getElementById('mainContent');
   const line = state.lines.find(l => l.code === state.selected);
   if (!line){ main.innerHTML = ''; return; }
@@ -831,7 +878,7 @@ function renderMain(){
               data-tooltip="${esc(getZoneDescription(zone))}">${getZoneLabel(zone)}</span>
       </div>
       <div class="line-info">
-        <span>🚏 ${line.trips_count} départs</span>
+        <span>🚏 ${trips.length} départs</span>
         <span>📍 ${line.stops_count} arrêts</span>
         <span>🧭 ${line.directions.length} directions</span>
       </div>
@@ -851,6 +898,14 @@ function renderMain(){
         <option value="all" ${state.filterDir==='all'?'selected':''}>🧭 Toutes directions</option>
         ${dirsOpts}
       </select>
+      <select id="serviceFilter">
+        <option value="all" ${state.filterService==='all'?'selected':''}>🚌 Tous services</option>
+        ${[...new Set(line.departures.map(t => t.service_id))].sort().map(sid => {
+          const svc = state.data.services?.[sid];
+          const days = (svc?.days || []).join(',');
+          return `<option value="${sid}" ${state.filterService===sid?'selected':''}>Service ${sid} (${days})</option>`;
+        }).join('')}
+      </select>
       <select id="hourFilter">
         <option value="all" ${state.filterHour==='all'?'selected':''}>🕐 Toute la journée</option>
         <option value="morning" ${state.filterHour==='morning'?'selected':''}>🌅 Matin (5-12h)</option>
@@ -858,7 +913,7 @@ function renderMain(){
         <option value="evening" ${state.filterHour==='evening'?'selected':''}>🌙 Soir (18-24h)</option>
       </select>
       <button class="btn primary" id="exportBtn">📥 Export CSV</button>
-      <span class="count">${trips.length} / ${line.trips_count}</span>
+      <span class="count">${trips.length} / ${trips.length}</span>
     </div>
 
     <div class="trips-list">
@@ -883,6 +938,10 @@ function renderMain(){
   });
   document.getElementById('hourFilter').addEventListener('change', e => {
     state.filterHour = e.target.value; state.page = 1; renderMain();
+  });
+
+  document.getElementById('serviceFilter').addEventListener('change', e => {
+    state.filterService = e.target.value; state.page = 1; renderMain();
   });
   document.getElementById('exportBtn').addEventListener('click', () => exportCsv(line, trips));
 

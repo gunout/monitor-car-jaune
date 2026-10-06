@@ -1,7 +1,7 @@
 {
-  "source": "GTFS Car Jaune (HASTUS) — COMPLET",
+  "source": "GTFS Car Jaune (HASTUS) COMPLET",
   "zip": "car-jaune-gtfs-actuel.zip",
-  "generated_at": "2026-10-06T23:39:19+0400",
+  "generated_at": "2026-10-06T23:53:37+0400",
   "counts": {
     "lines": 16,
     "stops": 468,
