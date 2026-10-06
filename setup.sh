@@ -277,7 +277,7 @@ PYEOF
 
 setup_venv() {
   log "Création du venv Python…"
-  if [[ -d "${VENV_DIR}" && -x "${VENV_DIR}/bin/python" ]]; then
+  if [[ -d "${VENV_DIR}" && -x "${VENV_DIR}/bin/python3" ]]; then
     ok "venv existant réutilisé"
   else
     if ! "${PYTHON_BIN}" -m venv "${VENV_DIR}" 2>>"${LOG_FILE}"; then
@@ -293,12 +293,12 @@ setup_venv() {
   fi
   export VIRTUAL_ENV="${VENV_DIR}"
   log "Mise à jour pip…"
-  if ! python -m pip install --quiet --upgrade pip --timeout 60 --retries 3 \
+  if ! python3 -m pip install --quiet --upgrade pip --timeout 60 --retries 3 \
         >>"${LOG_FILE}" 2>&1; then
     warn "pip upgrade échoué — on continue"
   fi
   log "Installation des dépendances…"
-  if ! python -m pip install --quiet --timeout 60 --retries 3 \
+  if ! python3 -m pip install --quiet --timeout 60 --retries 3 \
         -r "${BASE_DIR}/scripts/requirements.txt" \
         >>"${LOG_FILE}" 2>&1; then
     warn "pip install 'requests' échoué (fallback global possible)"
@@ -319,13 +319,13 @@ cd "${BASE_DIR}"
 [[ -d .venv ]] && source .venv/bin/activate 2>/dev/null || true
 
 echo "-> Agrégation…"
-if ! python scripts/aggregate.py --pages "${PAGES:-3}"; then
+if ! python3 scripts/aggregate.py --pages "${PAGES:-3}"; then
   echo "! API injoignable -> fallback seed"
-  python scripts/seed_car_jaune.py
+  python3 scripts/seed_car_jaune.py
 fi
 
 echo "-> Serveur : http://localhost:${PORT}"
-exec python -m http.server "${PORT}" --bind 127.0.0.1
+exec python3 -m http.server "${PORT}" --bind 127.0.0.1
 RUNEOF
   chmod +x "${BASE_DIR}/run.sh" 2>/dev/null || true
   ok "run.sh"
@@ -342,9 +342,9 @@ mkdir -p "$(dirname "${LOG}")"
 [[ -d "${BASE_DIR}/.venv" ]] && source "${BASE_DIR}/.venv/bin/activate" 2>/dev/null || true
 {
   echo "---- $(date -Is) ----"
-  if ! python "${BASE_DIR}/scripts/aggregate.py" --pages "${PAGES:-3}"; then
+  if ! python3 "${BASE_DIR}/scripts/aggregate.py" --pages "${PAGES:-3}"; then
     echo "! fallback seed"
-    python "${BASE_DIR}/scripts/seed_car_jaune.py"
+    python3 "${BASE_DIR}/scripts/seed_car_jaune.py"
   fi
 } >> "${LOG}" 2>&1
 REFEOF
@@ -362,12 +362,12 @@ cd "${BASE_DIR}"
 [[ -d .venv ]] && source .venv/bin/activate 2>/dev/null || true
 
 echo "-> Tentative API data.gouv.fr…"
-if python scripts/aggregate.py --pages "${PAGES:-3}"; then
+if python3 scripts/aggregate.py --pages "${PAGES:-3}"; then
   echo "OK Mise à jour API réussie"
   exit 0
 fi
 echo "! API injoignable -> utilisation du seed local"
-python scripts/seed_car_jaune.py
+python3 scripts/seed_car_jaune.py
 UPDEOF
   chmod +x "${BASE_DIR}/update.sh" 2>/dev/null || true
   ok "update.sh"
@@ -436,7 +436,7 @@ prime_data() {
   log "Génération du premier JSON…"
   [[ -d "${VENV_DIR}" ]] && source "${VENV_DIR}/bin/activate" 2>/dev/null || true
   local py="${PYTHON_BIN}"
-  [[ -x "${VENV_DIR}/bin/python" ]] && py="${VENV_DIR}/bin/python"
+  [[ -x "${VENV_DIR}/bin/python3" ]] && py="${VENV_DIR}/bin/python3"
 
   if "${py}" "${BASE_DIR}/scripts/aggregate.py" --pages 2 >>"${LOG_FILE}" 2>&1; then
     ok "JSON généré via API"

@@ -116,8 +116,6 @@ header h1 .badge{background:var(--yellow);color:var(--blue);
 .btn.primary{background:var(--green);color:var(--white);border-color:var(--green)}
 .btn.primary:hover{background:#008a4c;border-color:#008a4c;color:var(--white)}
 
-.tbl-wrap{background:var(--white);border-radius:10px;overflow:hidden;
-  box-shadow:0 2px 8px rgba(0,0,0,.06);overflow-x:auto}
 table{width:100%;border-collapse:collapse;font-size:12px}
 thead{background:var(--g50);position:sticky;top:0;z-index:10}
 thead th{padding:10px 12px;text-align:left;font-family:var(--mono);
@@ -129,9 +127,9 @@ thead th:hover{background:var(--blue-soft);color:var(--blue)}
 thead th.sorted::after{content:' ▲';color:var(--blue);font-size:9px}
 thead th.sorted.desc::after{content:' ▼'}
 tbody tr{border-bottom:1px solid var(--g100);transition:all .1s}
-tbody tr.dep-row:hover{background:var(--blue-soft)}
-tbody tr.dep-row{cursor:pointer;font-weight:600}
-tbody tr.dep-row.open{background:var(--blue-soft)}
+
+
+
 tbody td{padding:10px 12px;vertical-align:middle}
 td.dep{font-family:var(--mono);font-size:14px;font-weight:800;color:var(--blue)}
 td.arr{font-family:var(--mono);font-size:14px;font-weight:800;color:var(--green)}
@@ -216,6 +214,146 @@ mark{background:var(--yellow);color:var(--g900);padding:0 2px;
   thead th:nth-child(6),tbody td:nth-child(6),
   thead th:nth-child(7),tbody td:nth-child(7){display:none}
 }
+
+tr.hour-separator td{background:var(--blue);color:var(--white);
+  font-family:var(--mono);font-size:12px;font-weight:800;
+  padding:8px 12px;letter-spacing:1px}
+
+/* Légende des zones */
+.legend{background:var(--white);border-top:1px solid var(--g200);
+  padding:12px 14px;margin-top:12px}
+.legend-title{font-size:10px;text-transform:uppercase;
+  letter-spacing:1.5px;color:var(--g500);font-family:var(--mono);
+  font-weight:700;margin-bottom:8px}
+.legend-item{display:flex;align-items:center;gap:8px;
+  padding:5px 0;font-size:11px;color:var(--g700)}
+.legend-dot{width:12px;height:12px;border-radius:3px;flex-shrink:0}
+.legend-dot.express{background:var(--yellow)}
+.legend-dot.nord{background:var(--blue)}
+.legend-dot.sud{background:var(--green)}
+.legend-dot.ouest{background:var(--orange)}
+.legend-dot.est{background:var(--red)}
+.legend-dot.aeroport{background:var(--purple)}
+.legend-dot.zoom{background:var(--dark)}
+.legend-item strong{color:var(--g900);font-weight:700;
+  font-family:var(--mono);font-size:10px}
+.legend-item span{color:var(--g500);font-size:10px}
+[data-tooltip]{position:relative;cursor:help}
+[data-tooltip]:hover::after{content:attr(data-tooltip);
+  position:absolute;bottom:100%;left:50%;transform:translateX(-50%);
+  background:var(--g900);color:var(--white);padding:6px 10px;
+  border-radius:4px;font-size:11px;white-space:nowrap;
+  font-family:var(--sans);font-weight:500;z-index:1000;
+  box-shadow:0 4px 12px rgba(0,0,0,.2);pointer-events:none;
+  margin-bottom:6px}
+[data-tooltip]:hover::before{content:'';position:absolute;
+  bottom:100%;left:50%;transform:translateX(-50%);
+  border:5px solid transparent;border-top-color:var(--g900);
+  margin-bottom:-4px;z-index:1000;pointer-events:none}
+
+/* Liste des trajets (nouvelle structure) */
+.trips-list{display:flex;flex-direction:column;gap:12px}
+.trip-block{display:block;border:none}
+.trip-block td{padding:0;border:none}
+.trip-card{background:var(--white);border-radius:10px;
+  border-left:4px solid var(--blue);overflow:hidden;
+  box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.trip-head-mobile{display:grid;
+  grid-template-columns:80px 1fr 80px auto;gap:12px;
+  padding:14px 16px;align-items:center;
+  background:linear-gradient(to right,var(--blue-soft) 0%,var(--white) 100%)}
+.trip-head-mobile .trip-time{display:flex;flex-direction:column;gap:2px}
+.trip-head-mobile .trip-time .lbl{font-size:9px;text-transform:uppercase;
+  letter-spacing:1px;color:var(--g500);font-family:var(--mono);font-weight:700}
+.trip-head-mobile .trip-time strong{font-family:var(--mono);
+  font-size:18px;font-weight:800;color:var(--blue);line-height:1}
+.trip-head-mobile .trip-time.arr strong{color:var(--green)}
+.trip-head-mobile .trip-route{display:flex;align-items:center;gap:8px;
+  font-size:13px;font-weight:600;color:var(--g900);
+  overflow:hidden;text-overflow:ellipsis}
+.trip-head-mobile .trip-route .stop{overflow:hidden;
+  text-overflow:ellipsis;white-space:nowrap}
+.trip-head-mobile .trip-route .arrow{color:var(--blue);font-weight:800;flex-shrink:0}
+.trip-head-mobile .trip-meta{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.trip-meta .badge{font-family:var(--mono);font-size:10px;font-weight:700;
+  padding:4px 8px;border-radius:4px;white-space:nowrap}
+.trip-meta .badge.dur{background:var(--g100);color:var(--g700)}
+.trip-meta .badge.day{background:var(--blue-soft);color:var(--blue)}
+.trip-meta .badge.day.sat{background:var(--yellow-soft);color:#8a5e00}
+.trip-meta .badge.day.sun{background:var(--red-soft);color:var(--red)}
+.trip-meta .badge.stops{background:var(--g50);color:var(--g500);border:1px solid var(--g200)}
+.trip-card table.stops{width:100%;border-collapse:collapse;
+  font-size:12px;background:var(--white);border-top:1px solid var(--g200)}
+.trip-card table.stops th{background:var(--g50);padding:8px 12px;
+  text-align:left;font-family:var(--mono);font-size:10px;
+  color:var(--g500);font-weight:700;text-transform:uppercase;
+  letter-spacing:.5px;border-bottom:1px solid var(--g200)}
+.trip-card table.stops td{padding:8px 12px;
+  border-bottom:1px solid var(--g100);vertical-align:middle}
+.trip-card table.stops tr:last-child td{border-bottom:none}
+.trip-card table.stops .n{font-family:var(--mono);font-size:10px;
+  color:var(--g500);width:36px;text-align:center;font-weight:700}
+.trip-card table.stops .s{color:var(--g900);font-weight:500}
+.trip-card table.stops .a{font-family:var(--mono);font-size:11px;
+  color:var(--g700);text-align:right;width:70px}
+.trip-card table.stops .d{font-family:var(--mono);font-size:12px;
+  color:var(--blue);font-weight:800;text-align:right;width:70px}
+.trip-card table.stops tr.terminus-row{background:var(--green-soft)}
+.trip-card table.stops tr.terminus-row .s{font-weight:800;color:var(--green)}
+.trip-card table.stops tr.depart-row{background:var(--blue-soft)}
+.trip-card table.stops tr.depart-row .s{font-weight:800;color:var(--blue)}
+tr.hour-separator td{background:var(--blue);color:var(--white);
+  font-family:var(--mono);font-size:11px;font-weight:800;
+  padding:8px 14px;letter-spacing:.5px;border-radius:6px;margin-top:8px}
+
+@media(max-width:768px){
+  header{padding:12px 16px}
+  header h1{font-size:15px}
+  .stats{font-size:10px}
+  .stats span{padding:2px 8px}
+  .app{grid-template-columns:1fr;min-height:auto}
+  .sidebar{position:static;max-height:none;border-right:none;
+    border-bottom:1px solid var(--g200);padding:8px 0}
+  .sb-search{padding:6px 12px}
+  .line-btn{padding:10px 14px}
+  .legend{padding:10px 14px}
+  .legend-item{padding:4px 0;font-size:10px}
+  .main{padding:12px;max-height:none}
+  .line-header{padding:12px 14px;border-radius:8px}
+  .line-title{font-size:15px;gap:8px}
+  .line-title .code{padding:4px 10px;font-size:14px}
+  .zone-badge{font-size:9px;padding:2px 8px}
+  .line-info{font-size:10px;gap:4px}
+  .line-info span{padding:3px 8px}
+  .toolbar{padding:10px 12px;gap:8px;flex-direction:column;align-items:stretch}
+  .search-box{min-width:auto}
+  .toolbar select,.toolbar .btn{width:100%}
+  .toolbar .count{margin:0;text-align:center}
+  .trip-card{border-left-width:3px}
+  .trip-head-mobile{grid-template-columns:1fr 1fr;gap:8px;padding:10px 12px}
+  .trip-head-mobile .trip-time{grid-column:auto}
+  .trip-head-mobile .trip-time strong{font-size:16px}
+  .trip-head-mobile .trip-route{grid-column:1/-1;font-size:12px;margin:4px 0}
+  .trip-head-mobile .trip-meta{grid-column:1/-1;justify-content:flex-start;margin-top:4px}
+  .trip-card table.stops{font-size:11px}
+  .trip-card table.stops th,.trip-card table.stops td{padding:6px 8px}
+  .trip-card table.stops .n{width:28px;font-size:9px}
+  .trip-card table.stops .a,.trip-card table.stops .d{width:60px;font-size:11px}
+  .trip-card table.stops .d{font-size:12px}
+  .pagination{padding:10px;gap:4px}
+  .pagination button{padding:5px 10px;font-size:11px}
+  .pagination .info{font-size:10px;padding:0 4px}
+  .pagination .size-sel{font-size:10px;padding:4px 6px}
+  .hint{font-size:9px;padding:8px}
+  .kbd{display:none}
+}
+@media(max-width:480px){
+  header h1{font-size:13px}
+  .line-title{font-size:14px}
+  .trip-head-mobile .trip-time strong{font-size:15px}
+  .trip-head-mobile .trip-route{font-size:11px}
+  .trip-meta .badge{font-size:9px;padding:3px 6px}
+}
 </style>
 </head>
 <body>
@@ -232,6 +370,35 @@ mark{background:var(--yellow);color:var(--g900);padding:0 2px;
       <input type="text" id="lineSearch" placeholder="Filtrer les lignes…" autocomplete="off">
     </div>
     <div id="lineList"></div>
+<div class="legend">
+  <div class="legend-title">📖 Signification</div>
+  <div class="legend-item" data-tooltip="Lignes directes, peu d'arrêts">
+    <span class="legend-dot express"></span>
+    <strong>E1X, O1X, TX</strong>
+    <span>Express</span>
+  </div>
+  <div class="legend-item" data-tooltip="Secteur Est — Saint-Benoît / Saint-André">
+    <span class="legend-dot est"></span>
+    <strong>E1, E2, E3</strong>
+    <span>Est</span>
+  </div>
+  <div class="legend-item" data-tooltip="Secteur Ouest — Saint-Paul">
+    <span class="legend-dot ouest"></span>
+    <strong>O1, O2, O3</strong>
+    <span>Ouest</span>
+  </div>
+  <div class="legend-item" data-tooltip="Secteur Sud — Saint-Pierre / Saint-Joseph">
+    <span class="legend-dot sud"></span>
+    <strong>S1, S2, S3…</strong>
+    <span>Sud</span>
+  </div>
+  <div class="legend-item" data-tooltip="Desserte Aéroport Roland Garros">
+    <span class="legend-dot aeroport"></span>
+    <strong>T, TX</strong>
+    <span>Aéroport</span>
+  </div>
+</div>
+
   </aside>
   <main class="main" id="main">
     <div class="loading"><div class="spin"></div>Chargement du réseau…</div>
@@ -269,6 +436,12 @@ function highlight(text, query){
   if (idx === -1) return esc(t);
   return esc(t.slice(0, idx)) + '<mark>' + esc(t.slice(idx, idx + q.length)) + '</mark>' + esc(t.slice(idx + q.length));
 }
+function formatHM(t){
+  if (!t) return '—';
+  const parts = String(t).split(':');
+  if (parts.length < 2) return t;
+  return parts[0].padStart(2,'0') + ':' + parts[1].padStart(2,'0');
+}
 function parseHM(t){ if (!t) return null; const [h,m] = t.split(':').map(Number); if (isNaN(h)||isNaN(m)) return null; return h*60+m; }
 function formatDuration(min){ if (min==null) return '—'; if (min<60) return min+' min'; const h = Math.floor(min/60); const m = min%60; return m===0 ? h+'h' : h+'h'+String(m).padStart(2,'0'); }
 function duration(from, to){ const a = parseHM(from), b = parseHM(to); if (a==null||b==null) return null; let d = b-a; if (d<0) d += 1440; return d; }
@@ -288,6 +461,32 @@ function getZone(code){
 function getZoneLabel(zone){
   return {express:'⚡ Express',nord:'🔵 Nord',sud:'🟢 Sud',ouest:'🟠 Ouest',
           est:'🔴 Est',aeroport:'🟣 Aéroport',zoom:'⚫ Zoom'}[zone] || zone;
+}
+
+function getZoneDescription(zone){
+  return {
+    express: 'Express — direct, moins d\'arrêts',
+    nord: 'Nord — secteur Saint-Denis',
+    sud: 'Sud — secteur Saint-Pierre / Saint-Joseph',
+    ouest: 'Ouest — secteur Saint-Paul',
+    est: 'Est — secteur Saint-Benoît / Saint-André',
+    aeroport: 'Aéroport — desserte Roland Garros',
+    zoom: 'Zoom — express longue distance',
+  }[zone] || zone;
+}
+function getLineDescription(code){
+  const c = code.toUpperCase();
+  const letters = {
+    E: 'Est (Saint-Benoît / Saint-André)',
+    O: 'Ouest (Saint-Paul)',
+    S: 'Sud (Saint-Pierre / Saint-Joseph)',
+    T: 'Aéroport / Touristique',
+    ZO: 'Zoom (ancien Z\'éclair)',
+  };
+  const prefix = c.match(/^[A-Z]+/)?.[0] || '';
+  let desc = letters[prefix] || 'Ligne interurbaine';
+  if (c.endsWith('X')) desc += ' — EXPRESS';
+  return desc;
 }
 function getZoneIcon(zone){
   return {express:'⚡',nord:'🔵',sud:'🟢',ouest:'🟠',est:'🔴',
@@ -338,7 +537,9 @@ function renderSidebar(){
     const zone = getZone(l.code);
     const icon = getZoneIcon(zone);
     return `
-      <div class="line-btn ${l.code === state.selected ? 'active' : ''}" data-code="${esc(l.code)}">
+      <div class="line-btn ${l.code === state.selected ? 'active' : ''}"
+           data-code="${esc(l.code)}"
+           data-tooltip="${esc(getLineDescription(l.code))}">
         <span class="line-code">${esc(l.code)}</span>
         <span class="line-icon">${icon}</span>
         <span class="line-count">${l.trips_count}</span>
@@ -380,6 +581,15 @@ function getFilteredTrips(line){
       _day: dayClass(t.service_id),
       _dayLabel: dayLabel(t.service_id),
     };
+  });
+
+  // DÉDUPLICATION : même heure + arrêts + direction + jour
+  const seen = new Map();
+  trips = trips.filter(t => {
+    const key = `${t._dep}|${t._depStop}|${t._arrStop}|${t.headsign}|${t._dayLabel}`;
+    if (seen.has(key)) return false;
+    seen.set(key, true);
+    return true;
   });
 
   if (state.filterDay !== 'all') trips = trips.filter(t => t._day === state.filterDay);
@@ -439,8 +649,8 @@ function renderMain(){
 
   const sortClass = (k) => state.sortKey === k ? `sorted${state.sortDir === 'desc' ? ' desc' : ''}` : '';
 
+  let lastHour = null;
   const rows = pageTrips.map((t, i) => {
-    const isOpen = state.openTrips.has(t.trip_id);
     const stopRows = (t.stops || []).map((s, j) => {
       const isTerminus = j === t.stops.length - 1;
       const isDepart = j === 0;
@@ -449,29 +659,37 @@ function renderMain(){
         <tr class="${rowClass}">
           <td class="n">${String(j+1).padStart(2,'0')}</td>
           <td class="s">${highlight(s.stop, state.search)}${isTerminus ? ' 🏁' : (isDepart ? ' 🚏' : '')}</td>
-          <td class="a">${esc(s.arr || '—')}</td>
-          <td class="d">${esc(s.dep || '—')}</td>
+          <td class="a">${esc(formatHM(s.arr))}</td>
+          <td class="d">${esc(formatHM(s.dep))}</td>
         </tr>
       `;
     }).join('');
 
     return `
-      <tr class="dep-row ${isOpen ? 'open' : ''}" data-trip="${esc(t.trip_id)}">
-        <td class="dep">${esc(t._dep || '—')}</td>
-        <td class="terminus">${highlight(t._depStop, state.search)}</td>
-        <td class="arrow">→</td>
-        <td class="terminus">${highlight(t._arrStop, state.search)}</td>
-        <td class="arr">${esc(t._arr || '—')}</td>
-        <td class="dur">${formatDuration(t._dur)}</td>
-        <td class="headsign">${esc(t.headsign || '—')}</td>
-        <td class="day"><span class="${t._day}">${t._dayLabel}</span></td>
-        <td class="nstops">${t._nstops}</td>
-      </tr>
-      ${isOpen ? `
-      <tr class="detail-row">
+      <tr class="hour-separator"><td colspan="9">🕐 ${formatHM(t._dep).slice(0,2)}:00 — ${esc(t._depStop)} → ${esc(t._arrStop)}</td></tr>
+      <tr class="trip-block">
         <td colspan="9">
-          <div class="detail-inner">
-            <div class="detail-title">🕐 Arrêts détaillés · ${esc(t.headsign || '')}</div>
+          <div class="trip-card">
+            <div class="trip-head-mobile">
+              <div class="trip-time">
+                <span class="lbl">Départ</span>
+                <strong>${esc(formatHM(t._dep))}</strong>
+              </div>
+              <div class="trip-route">
+                <span class="stop">${highlight(t._depStop, state.search)}</span>
+                <span class="arrow">→</span>
+                <span class="stop">${highlight(t._arrStop, state.search)}</span>
+              </div>
+              <div class="trip-time arr">
+                <span class="lbl">Arrivée</span>
+                <strong>${esc(formatHM(t._arr))}</strong>
+              </div>
+              <div class="trip-meta">
+                <span class="badge dur">${formatDuration(t._dur)}</span>
+                <span class="badge day ${t._day}">${t._dayLabel}</span>
+                <span class="badge stops">${t._nstops} arrêts</span>
+              </div>
+            </div>
             <table class="stops">
               <thead>
                 <tr>
@@ -485,7 +703,7 @@ function renderMain(){
             </table>
           </div>
         </td>
-      </tr>` : ''}
+      </tr>
     `;
   }).join('');
 
@@ -530,7 +748,8 @@ function renderMain(){
       <div class="line-title">
         <span class="code">${esc(line.code)}</span>
         ${esc(line.name)}
-        <span class="zone-badge zone-${zone}">${getZoneLabel(zone)}</span>
+        <span class="zone-badge zone-${zone}"
+              data-tooltip="${esc(getZoneDescription(zone))}">${getZoneLabel(zone)}</span>
       </div>
       <div class="line-info">
         <span>🚏 ${line.trips_count} départs</span>
@@ -562,24 +781,8 @@ function renderMain(){
       <button class="btn primary" id="exportBtn">📥 Export CSV</button>
       <span class="count">${trips.length} / ${line.trips_count}</span>
     </div>
-
-    <div class="tbl-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th data-sort="dep" class="${sortClass('dep')}">Départ</th>
-            <th data-sort="depStop" class="${sortClass('depStop')}">Arrêt de départ</th>
-            <th></th>
-            <th data-sort="arrStop" class="${sortClass('arrStop')}">Terminus</th>
-            <th data-sort="arr" class="${sortClass('arr')}">Arrivée</th>
-            <th data-sort="dur" class="${sortClass('dur')}">Durée</th>
-            <th data-sort="headsign" class="${sortClass('headsign')}">Direction</th>
-            <th data-sort="day" class="${sortClass('day')}">Jour</th>
-            <th data-sort="nstops" class="${sortClass('nstops')}">Arrêts</th>
-          </tr>
-        </thead>
-        <tbody>${rows || '<tr><td colspan="9" class="loading">Aucun départ pour ces filtres</td></tr>'}</tbody>
-      </table>
+    <div class="trips-list">
+      ${rows || '<div class="loading">Aucun départ pour ces filtres</div>'}
     </div>
 
     ${paginationHtml}
@@ -617,15 +820,7 @@ function renderMain(){
     });
   });
 
-  main.querySelectorAll('.dep-row').forEach(row => {
-    row.addEventListener('click', () => {
-      const tid = row.dataset.trip;
-      if (state.openTrips.has(tid)) state.openTrips.delete(tid);
-      else state.openTrips.add(tid);
-      renderMain();
-    });
-  });
-
+  // Clic désactivé — les arrêts sont visibles en permanence
   main.querySelectorAll('.pagination button[data-page]').forEach(b => {
     b.addEventListener('click', () => {
       const p = parseInt(b.dataset.page);

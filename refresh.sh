@@ -1,3 +1,4 @@
+
 #!/usr/bin/env bash
 set -uo pipefail
 BASE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -6,8 +7,8 @@ mkdir -p "$(dirname "${LOG}")"
 [[ -d "${BASE_DIR}/.venv" ]] && source "${BASE_DIR}/.venv/bin/activate" 2>/dev/null || true
 {
   echo "---- $(date -Is) ----"
-  if ! python "${BASE_DIR}/scripts/aggregate.py" --pages "${PAGES:-3}"; then
-    echo "! fallback seed"
-    python "${BASE_DIR}/scripts/seed_car_jaune.py"
-  fi
+  python3 "${BASE_DIR}/scripts/fetch_car_jaune.py" 2>&1 || echo "! fetch échoué"
+  python3 "${BASE_DIR}/scripts/parse_car_jaune_full.py" 2>&1 || echo "! parse échoué"
 } >> "${LOG}" 2>&1
+
+

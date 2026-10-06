@@ -1,0 +1,30 @@
+{
+  "dataset_id": "horaires-du-reseau-interurbain-car-jaune-region-reunion",
+  "dataset_url": "https://www.data.gouv.fr/datasets/horaires-du-reseau-interurbain-car-jaune-region-reunion",
+  "title": "Horaires du réseau interurbain Car Jaune - REGION REUNION",
+  "organization": null,
+  "last_update": "2020-08-20T08:00:52.010000+00:00",
+  "resources": [
+    {
+      "title": "CAR  JAUNE - Région Réunion",
+      "format": "zip",
+      "path": "/home/gleaphe/Desktop/monitor974/data/car_jaune/01_CAR__JAUNE_-_Région_Réunion.zip",
+      "size": 244660,
+      "url": "https://static.data.gouv.fr/resources/horaires-du-reseau-interurbain-car-jaune-region-reunion/20200820-080051/horaires-gtfs-car-jaune-offre-en-vigueur-a-partir-du-17-aout-2020.zip"
+    },
+    {
+      "title": "CR974-transports-car-jaune.png",
+      "format": "png",
+      "path": "/home/gleaphe/Desktop/monitor974/data/car_jaune/02_CR974-transports-car-jaune.png",
+      "size": 786113,
+      "url": "https://static.data.gouv.fr/resources/horaires-du-reseau-interurbain-car-jaune-region-reunion/20190528-054928/cr974-transports-car-jaune.png"
+    },
+    {
+      "title": "visuel-temps-reel.pdf",
+      "format": "pdf",
+      "path": "/home/gleaphe/Desktop/monitor974/data/car_jaune/03_visuel-temps-reel.pdf",
+      "size": 3162176,
+      "url": "https://static.data.gouv.fr/resources/horaires-du-reseau-interurbain-car-jaune-region-reunion/20190528-054623/visuel-temps-reel.pdf"
+    }
+  ]
+}
