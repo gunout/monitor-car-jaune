@@ -3,7 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🚌 Car Jaune 974 — Horaires interactifs</title>
+<title>🚌 Car Jaune 974 — Monitor intelligent</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 :root{
@@ -57,6 +59,32 @@ header h1 .badge{background:var(--yellow);color:var(--blue);
 .line-icon{font-size:11px;flex-shrink:0}
 .line-count{font-family:var(--mono);font-size:10px;color:var(--g500);
   margin-left:auto}
+.legend{background:var(--white);border-top:1px solid var(--g200);
+  padding:12px 14px;margin-top:12px}
+.legend-title{font-size:10px;text-transform:uppercase;
+  letter-spacing:1.5px;color:var(--g500);font-family:var(--mono);
+  font-weight:700;margin-bottom:8px}
+.legend-item{display:flex;align-items:center;gap:8px;
+  padding:5px 0;font-size:11px;color:var(--g700)}
+.legend-dot{width:12px;height:12px;border-radius:3px;flex-shrink:0}
+.legend-dot.express{background:var(--yellow)}
+.legend-dot.nord{background:var(--blue)}
+.legend-dot.sud{background:var(--green)}
+.legend-dot.ouest{background:var(--orange)}
+.legend-dot.est{background:var(--red)}
+.legend-dot.aeroport{background:var(--purple)}
+.legend-dot.zoom{background:var(--dark)}
+.legend-item strong{color:var(--g900);font-weight:700;
+  font-family:var(--mono);font-size:10px}
+.legend-item span{color:var(--g500);font-size:10px}
+[data-tooltip]{position:relative;cursor:help}
+[data-tooltip]:hover::after{content:attr(data-tooltip);
+  position:absolute;bottom:100%;left:50%;transform:translateX(-50%);
+  background:var(--g900);color:var(--white);padding:6px 10px;
+  border-radius:4px;font-size:11px;white-space:nowrap;
+  font-family:var(--sans);font-weight:500;z-index:1000;
+  box-shadow:0 4px 12px rgba(0,0,0,.2);pointer-events:none;
+  margin-bottom:6px}
 .main{padding:16px 20px;overflow-y:auto;max-height:calc(100vh - 110px)}
 
 .line-header{background:var(--white);border-radius:10px;padding:16px 20px;
@@ -89,6 +117,131 @@ header h1 .badge{background:var(--yellow);color:var(--blue);
 .line-info span{background:var(--g50);padding:4px 10px;border-radius:4px;
   border:1px solid var(--g200)}
 
+/* ═══ MODULE INTELLIGENT ═══ */
+.smart-widget{background:linear-gradient(135deg,var(--blue),var(--blue-hi));
+  color:var(--white);border-radius:12px;padding:14px 18px;
+  margin-bottom:14px;box-shadow:0 4px 16px rgba(0,85,164,.25);
+  display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.smart-btn{background:rgba(255,255,255,.2);color:var(--white);
+  border:1px solid rgba(255,255,255,.3);
+  padding:9px 16px;border-radius:8px;cursor:pointer;
+  font-size:13px;font-weight:700;font-family:var(--sans);
+  display:inline-flex;align-items:center;gap:7px;
+  transition:all .15s;white-space:nowrap;
+  backdrop-filter:blur(4px)}
+.smart-btn:hover{background:rgba(255,255,255,.3);transform:translateY(-1px)}
+.smart-btn.active{background:var(--green);border-color:var(--green)}
+.smart-btn:disabled{opacity:.5;cursor:not-allowed}
+.smart-status{font-family:var(--mono);font-size:11px;
+  color:rgba(255,255,255,.85);margin-left:auto;
+  background:rgba(0,0,0,.2);padding:5px 10px;border-radius:6px}
+
+.smart-results{background:var(--white);border-radius:12px;
+  padding:0;margin-bottom:14px;
+  box-shadow:0 4px 16px rgba(0,0,0,.08);
+  border-left:5px solid var(--green);overflow:hidden}
+.smart-results-head{padding:14px 18px;
+  background:linear-gradient(to right,var(--green-soft) 0%,var(--white) 100%);
+  border-bottom:1px solid var(--g200);
+  display:flex;align-items:center;gap:10px}
+.smart-results-head h3{font-size:15px;color:var(--green);
+  font-weight:800;display:flex;align-items:center;gap:8px;
+  flex:1;margin:0}
+.smart-results-head .dist{font-family:var(--mono);font-size:11px;
+  color:var(--g700);background:var(--white);padding:3px 8px;
+  border-radius:4px;border:1px solid var(--g200)}
+.smart-results-head .close{background:transparent;border:none;
+  color:var(--g500);cursor:pointer;font-size:18px;
+  padding:4px 8px;border-radius:4px;transition:all .15s}
+.smart-results-head .close:hover{background:var(--g100);color:var(--g900)}
+.smart-results-body{padding:8px 0}
+
+.next-car{display:grid;
+  grid-template-columns:70px 1fr 100px 90px;
+  gap:14px;align-items:center;padding:14px 18px;
+  border-bottom:1px solid var(--g100);cursor:pointer;
+  transition:all .15s}
+.next-car:hover{background:var(--blue-soft);transform:translateX(2px)}
+.next-car:last-child{border-bottom:none}
+.next-car .code{background:var(--blue);color:var(--white);
+  padding:6px 12px;border-radius:6px;font-family:var(--mono);
+  font-size:14px;font-weight:800;text-align:center;
+  letter-spacing:.5px}
+.next-car .route{font-size:13px;font-weight:600;color:var(--g900);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.next-car .route small{display:block;font-size:11px;
+  color:var(--g500);font-family:var(--mono);font-weight:400;
+  margin-top:3px}
+.next-car .time{font-family:var(--mono);font-size:18px;
+  font-weight:800;color:var(--blue);text-align:right;line-height:1}
+.next-car .time.soon{color:var(--green)}
+.next-car .time.very-soon{color:var(--red);
+  animation:pulse 1s infinite}
+.next-car .wait{font-family:var(--mono);font-size:11px;
+  color:var(--g500);text-align:right;font-weight:600}
+.next-car .wait.very-soon{color:var(--red);font-weight:800}
+.next-car .wait.soon{color:var(--green);font-weight:700}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+
+.smart-extra{margin-top:8px;padding:0 18px 14px}
+.smart-extra summary{cursor:pointer;font-size:12px;
+  color:var(--blue);font-weight:700;padding:8px 0;
+  list-style:none;user-select:none}
+.smart-extra summary::-webkit-details-marker{display:none}
+.smart-extra summary::before{content:'▸ ';display:inline-block;
+  transition:transform .2s}
+.smart-extra[open] summary::before{transform:rotate(90deg)}
+.smart-extra .stop-row{padding:9px 0;border-bottom:1px solid var(--g100);
+  display:flex;justify-content:space-between;align-items:center;
+  font-size:12px;cursor:pointer;transition:all .15s}
+.smart-extra .stop-row:hover{background:var(--blue-soft);
+  margin:0 -18px;padding-left:18px;padding-right:18px}
+.smart-extra .stop-row:last-child{border-bottom:none}
+.smart-extra .stop-row .name{color:var(--g900);font-weight:600}
+.smart-extra .stop-row .meta{color:var(--g500);font-family:var(--mono);
+  font-size:11px;text-align:right}
+
+#map{height:300px;border-radius:8px;margin-top:10px;
+  box-shadow:inset 0 0 0 1px var(--g200)}
+.leaflet-container{font-family:var(--sans)!important}
+.leaflet-popup-content{font-size:12px;margin:8px 10px}
+.leaflet-popup-content strong{color:var(--blue)}
+
+.itinerary-form{padding:14px 18px;display:grid;
+  grid-template-columns:1fr 1fr auto;gap:10px;
+  background:var(--g50);border-bottom:1px solid var(--g200)}
+.itinerary-form input{padding:9px 12px;border:1px solid var(--g200);
+  border-radius:6px;font-size:13px;font-family:var(--sans);
+  background:var(--white)}
+.itinerary-form input:focus{outline:none;border-color:var(--blue);
+  box-shadow:0 0 0 3px var(--blue-soft)}
+.itinerary-form button{background:var(--green);color:var(--white);
+  border:none;padding:9px 18px;border-radius:6px;cursor:pointer;
+  font-weight:700;font-size:13px;transition:all .15s}
+.itinerary-form button:hover{background:#008a4c}
+.itinerary-result{padding:14px 18px;font-size:13px;
+  border-bottom:1px solid var(--g100);line-height:1.7}
+.itinerary-result .step{display:flex;gap:10px;padding:6px 0}
+.itinerary-result .step .icon{font-size:16px;flex-shrink:0}
+.itinerary-result .step .txt{color:var(--g900)}
+.itinerary-result .step .txt strong{color:var(--blue)}
+
+.notif-prompt{position:fixed;bottom:20px;right:20px;
+  background:var(--white);border-radius:10px;
+  box-shadow:0 8px 24px rgba(0,0,0,.15);
+  border-left:4px solid var(--blue);
+  padding:14px 18px;max-width:320px;z-index:9999;
+  display:none;animation:slideIn .3s}
+.notif-prompt.show{display:block}
+.notif-prompt p{font-size:13px;color:var(--g700);margin-bottom:10px}
+.notif-prompt button{background:var(--blue);color:var(--white);
+  border:none;padding:7px 14px;border-radius:6px;
+  cursor:pointer;font-size:12px;font-weight:700;margin-right:6px}
+.notif-prompt button.secondary{background:var(--g100);color:var(--g700)}
+@keyframes slideIn{from{transform:translateY(100%);opacity:0}
+  to{transform:translateY(0);opacity:1}}
+
+/* Toolbar + filtres */
 .toolbar{background:var(--white);border-radius:10px;padding:12px 16px;
   margin-bottom:14px;display:flex;gap:10px;flex-wrap:wrap;
   align-items:center;box-shadow:0 2px 8px rgba(0,0,0,.06)}
@@ -116,142 +269,7 @@ header h1 .badge{background:var(--yellow);color:var(--blue);
 .btn.primary{background:var(--green);color:var(--white);border-color:var(--green)}
 .btn.primary:hover{background:#008a4c;border-color:#008a4c;color:var(--white)}
 
-table{width:100%;border-collapse:collapse;font-size:12px}
-thead{background:var(--g50);position:sticky;top:0;z-index:10}
-thead th{padding:10px 12px;text-align:left;font-family:var(--mono);
-  font-size:10px;text-transform:uppercase;letter-spacing:1px;
-  color:var(--g500);font-weight:700;border-bottom:2px solid var(--g200);
-  white-space:nowrap;cursor:pointer;user-select:none;
-  transition:background .15s}
-thead th:hover{background:var(--blue-soft);color:var(--blue)}
-thead th.sorted::after{content:' ▲';color:var(--blue);font-size:9px}
-thead th.sorted.desc::after{content:' ▼'}
-tbody tr{border-bottom:1px solid var(--g100);transition:all .1s}
-
-
-
-tbody td{padding:10px 12px;vertical-align:middle}
-td.dep{font-family:var(--mono);font-size:14px;font-weight:800;color:var(--blue)}
-td.arr{font-family:var(--mono);font-size:14px;font-weight:800;color:var(--green)}
-td.dur{font-family:var(--mono);font-size:11px;color:var(--g700);
-  background:var(--g50);border-radius:4px;text-align:center;font-weight:700}
-td.terminus{font-size:12px;color:var(--g900);font-weight:600}
-td.headsign{font-size:11px;color:var(--g500);font-family:var(--mono)}
-td.day{text-align:center}
-td.day span{font-family:var(--mono);font-size:10px;font-weight:800;
-  padding:3px 8px;border-radius:3px;background:var(--g100);color:var(--g700)}
-td.day span.week{background:var(--blue-soft);color:var(--blue)}
-td.day span.sat{background:var(--yellow-soft);color:#8a5e00}
-td.day span.sun{background:var(--red-soft);color:var(--red)}
-td.nstops{font-family:var(--mono);font-size:11px;color:var(--g500);text-align:center}
-td.arrow{color:var(--blue);font-weight:800;text-align:center;width:30px}
-
-tr.detail-row td{padding:0;background:var(--g50);
-  border-bottom:2px solid var(--blue)}
-.detail-inner{padding:14px 20px}
-.detail-title{font-size:10px;text-transform:uppercase;
-  letter-spacing:1.5px;color:var(--g500);font-family:var(--mono);
-  font-weight:700;margin-bottom:10px}
-table.stops{width:100%;border-collapse:collapse;font-size:12px;
-  background:var(--white);border-radius:6px;overflow:hidden}
-table.stops th{background:var(--g100);padding:8px 12px;text-align:left;
-  font-family:var(--mono);font-size:10px;color:var(--g700);
-  font-weight:700;text-transform:uppercase;letter-spacing:.5px;
-  cursor:default}
-table.stops th:hover{background:var(--g100);color:var(--g700)}
-table.stops td{padding:8px 12px;border-bottom:1px solid var(--g100)}
-table.stops tr:last-child td{border-bottom:none}
-table.stops .n{font-family:var(--mono);font-size:10px;color:var(--g500);
-  width:40px;text-align:center;font-weight:700}
-table.stops .s{color:var(--g900);font-weight:500}
-table.stops .a{font-family:var(--mono);font-size:11px;color:var(--g700);
-  text-align:right;width:80px}
-table.stops .d{font-family:var(--mono);font-size:12px;color:var(--blue);
-  font-weight:800;text-align:right;width:80px}
-table.stops tr.terminus-row{background:var(--green-soft)}
-table.stops tr.terminus-row .s{font-weight:800;color:var(--green)}
-table.stops tr.depart-row{background:var(--blue-soft)}
-table.stops tr.depart-row .s{font-weight:800;color:var(--blue)}
-
-.pagination{display:flex;gap:6px;align-items:center;justify-content:center;
-  padding:14px;background:var(--white);margin-top:12px;border-radius:10px;
-  box-shadow:0 2px 8px rgba(0,0,0,.06);flex-wrap:wrap}
-.pagination button{background:var(--white);border:1px solid var(--g200);
-  color:var(--g700);padding:6px 12px;border-radius:4px;cursor:pointer;
-  font-size:12px;font-weight:600;font-family:var(--sans);transition:all .15s}
-.pagination button:hover:not(:disabled){border-color:var(--blue);
-  color:var(--blue);background:var(--blue-soft)}
-.pagination button:disabled{opacity:.3;cursor:not-allowed}
-.pagination button.active{background:var(--blue);color:var(--white);
-  border-color:var(--blue)}
-.pagination .info{font-family:var(--mono);font-size:11px;
-  color:var(--g700);padding:0 10px}
-.pagination .size-sel{padding:6px 8px;border:1px solid var(--g200);
-  border-radius:4px;font-size:11px;font-family:var(--sans)}
-
-mark{background:var(--yellow);color:var(--g900);padding:0 2px;
-  border-radius:2px;font-weight:700}
-.loading{text-align:center;padding:60px;color:var(--g500)}
-.spin{width:40px;height:40px;border:3px solid var(--g200);
-  border-top-color:var(--blue);border-radius:50%;
-  animation:sp .8s linear infinite;margin:0 auto 12px}
-@keyframes sp{to{transform:rotate(360deg)}}
-.err{background:#fff5f5;border:1px solid var(--red);
-  border-left:4px solid var(--red);padding:20px;border-radius:6px;
-  color:var(--red);margin:20px;font-size:13px}
-.kbd{display:inline-block;background:var(--g100);border:1px solid var(--g200);
-  border-radius:3px;padding:1px 6px;font-family:var(--mono);font-size:10px;
-  color:var(--g700);font-weight:700}
-.hint{font-family:var(--mono);font-size:10px;color:var(--g500);
-  text-align:center;padding:10px}
-
-@media(max-width:900px){
-  .app{grid-template-columns:1fr}
-  .sidebar{position:static;max-height:180px;border-right:none;
-    border-bottom:1px solid var(--g200)}
-  .main{max-height:none}
-  thead th:nth-child(4),tbody td:nth-child(4),
-  thead th:nth-child(6),tbody td:nth-child(6),
-  thead th:nth-child(7),tbody td:nth-child(7){display:none}
-}
-
-tr.hour-separator td{background:var(--blue);color:var(--white);
-  font-family:var(--mono);font-size:12px;font-weight:800;
-  padding:8px 12px;letter-spacing:1px}
-
-/* Légende des zones */
-.legend{background:var(--white);border-top:1px solid var(--g200);
-  padding:12px 14px;margin-top:12px}
-.legend-title{font-size:10px;text-transform:uppercase;
-  letter-spacing:1.5px;color:var(--g500);font-family:var(--mono);
-  font-weight:700;margin-bottom:8px}
-.legend-item{display:flex;align-items:center;gap:8px;
-  padding:5px 0;font-size:11px;color:var(--g700)}
-.legend-dot{width:12px;height:12px;border-radius:3px;flex-shrink:0}
-.legend-dot.express{background:var(--yellow)}
-.legend-dot.nord{background:var(--blue)}
-.legend-dot.sud{background:var(--green)}
-.legend-dot.ouest{background:var(--orange)}
-.legend-dot.est{background:var(--red)}
-.legend-dot.aeroport{background:var(--purple)}
-.legend-dot.zoom{background:var(--dark)}
-.legend-item strong{color:var(--g900);font-weight:700;
-  font-family:var(--mono);font-size:10px}
-.legend-item span{color:var(--g500);font-size:10px}
-[data-tooltip]{position:relative;cursor:help}
-[data-tooltip]:hover::after{content:attr(data-tooltip);
-  position:absolute;bottom:100%;left:50%;transform:translateX(-50%);
-  background:var(--g900);color:var(--white);padding:6px 10px;
-  border-radius:4px;font-size:11px;white-space:nowrap;
-  font-family:var(--sans);font-weight:500;z-index:1000;
-  box-shadow:0 4px 12px rgba(0,0,0,.2);pointer-events:none;
-  margin-bottom:6px}
-[data-tooltip]:hover::before{content:'';position:absolute;
-  bottom:100%;left:50%;transform:translateX(-50%);
-  border:5px solid transparent;border-top-color:var(--g900);
-  margin-bottom:-4px;z-index:1000;pointer-events:none}
-
-/* Liste des trajets (nouvelle structure) */
+/* Liste des trajets */
 .trips-list{display:flex;flex-direction:column;gap:12px}
 .trip-block{display:block;border:none}
 .trip-block td{padding:0;border:none}
@@ -304,7 +322,39 @@ tr.hour-separator td{background:var(--blue);color:var(--white);
 .trip-card table.stops tr.depart-row .s{font-weight:800;color:var(--blue)}
 tr.hour-separator td{background:var(--blue);color:var(--white);
   font-family:var(--mono);font-size:11px;font-weight:800;
-  padding:8px 14px;letter-spacing:.5px;border-radius:6px;margin-top:8px}
+  padding:8px 14px;letter-spacing:.5px;border-radius:6px}
+
+.pagination{display:flex;gap:6px;align-items:center;justify-content:center;
+  padding:14px;background:var(--white);margin-top:12px;border-radius:10px;
+  box-shadow:0 2px 8px rgba(0,0,0,.06);flex-wrap:wrap}
+.pagination button{background:var(--white);border:1px solid var(--g200);
+  color:var(--g700);padding:6px 12px;border-radius:4px;cursor:pointer;
+  font-size:12px;font-weight:600;font-family:var(--sans);transition:all .15s}
+.pagination button:hover:not(:disabled){border-color:var(--blue);
+  color:var(--blue);background:var(--blue-soft)}
+.pagination button:disabled{opacity:.3;cursor:not-allowed}
+.pagination button.active{background:var(--blue);color:var(--white);
+  border-color:var(--blue)}
+.pagination .info{font-family:var(--mono);font-size:11px;
+  color:var(--g700);padding:0 10px}
+.pagination .size-sel{padding:6px 8px;border:1px solid var(--g200);
+  border-radius:4px;font-size:11px;font-family:var(--sans)}
+
+mark{background:var(--yellow);color:var(--g900);padding:0 2px;
+  border-radius:2px;font-weight:700}
+.loading{text-align:center;padding:60px;color:var(--g500)}
+.spin{width:40px;height:40px;border:3px solid var(--g200);
+  border-top-color:var(--blue);border-radius:50%;
+  animation:sp .8s linear infinite;margin:0 auto 12px}
+@keyframes sp{to{transform:rotate(360deg)}}
+.err{background:#fff5f5;border:1px solid var(--red);
+  border-left:4px solid var(--red);padding:20px;border-radius:6px;
+  color:var(--red);margin:20px;font-size:13px}
+.kbd{display:inline-block;background:var(--g100);border:1px solid var(--g200);
+  border-radius:3px;padding:1px 6px;font-family:var(--mono);font-size:10px;
+  color:var(--g700);font-weight:700}
+.hint{font-family:var(--mono);font-size:10px;color:var(--g500);
+  text-align:center;padding:10px}
 
 @media(max-width:768px){
   header{padding:12px 16px}
@@ -314,10 +364,6 @@ tr.hour-separator td{background:var(--blue);color:var(--white);
   .app{grid-template-columns:1fr;min-height:auto}
   .sidebar{position:static;max-height:none;border-right:none;
     border-bottom:1px solid var(--g200);padding:8px 0}
-  .sb-search{padding:6px 12px}
-  .line-btn{padding:10px 14px}
-  .legend{padding:10px 14px}
-  .legend-item{padding:4px 0;font-size:10px}
   .main{padding:12px;max-height:none}
   .line-header{padding:12px 14px;border-radius:8px}
   .line-title{font-size:15px;gap:8px}
@@ -331,7 +377,6 @@ tr.hour-separator td{background:var(--blue);color:var(--white);
   .toolbar .count{margin:0;text-align:center}
   .trip-card{border-left-width:3px}
   .trip-head-mobile{grid-template-columns:1fr 1fr;gap:8px;padding:10px 12px}
-  .trip-head-mobile .trip-time{grid-column:auto}
   .trip-head-mobile .trip-time strong{font-size:16px}
   .trip-head-mobile .trip-route{grid-column:1/-1;font-size:12px;margin:4px 0}
   .trip-head-mobile .trip-meta{grid-column:1/-1;justify-content:flex-start;margin-top:4px}
@@ -346,6 +391,19 @@ tr.hour-separator td{background:var(--blue);color:var(--white);
   .pagination .size-sel{font-size:10px;padding:4px 6px}
   .hint{font-size:9px;padding:8px}
   .kbd{display:none}
+  .smart-widget{padding:10px 12px;gap:8px}
+  .smart-btn{font-size:12px;padding:8px 12px;flex:1;justify-content:center}
+  .smart-status{width:100%;text-align:center;margin:4px 0 0 0}
+  .smart-results-head{padding:12px 14px}
+  .smart-results-head h3{font-size:13px}
+  .next-car{grid-template-columns:60px 1fr 80px;gap:10px;padding:12px 14px}
+  .next-car .code{font-size:13px;padding:5px 10px}
+  .next-car .route{font-size:12px}
+  .next-car .route small{font-size:10px}
+  .next-car .time{font-size:16px}
+  .next-car .wait{font-size:10px}
+  .itinerary-form{grid-template-columns:1fr;padding:12px 14px}
+  #map{height:220px}
 }
 @media(max-width:480px){
   header h1{font-size:13px}
@@ -370,38 +428,66 @@ tr.hour-separator td{background:var(--blue);color:var(--white);
       <input type="text" id="lineSearch" placeholder="Filtrer les lignes…" autocomplete="off">
     </div>
     <div id="lineList"></div>
-<div class="legend">
-  <div class="legend-title">📖 Signification</div>
-  <div class="legend-item" data-tooltip="Lignes directes, peu d'arrêts">
-    <span class="legend-dot express"></span>
-    <strong>E1X, O1X, TX</strong>
-    <span>Express</span>
-  </div>
-  <div class="legend-item" data-tooltip="Secteur Est — Saint-Benoît / Saint-André">
-    <span class="legend-dot est"></span>
-    <strong>E1, E2, E3</strong>
-    <span>Est</span>
-  </div>
-  <div class="legend-item" data-tooltip="Secteur Ouest — Saint-Paul">
-    <span class="legend-dot ouest"></span>
-    <strong>O1, O2, O3</strong>
-    <span>Ouest</span>
-  </div>
-  <div class="legend-item" data-tooltip="Secteur Sud — Saint-Pierre / Saint-Joseph">
-    <span class="legend-dot sud"></span>
-    <strong>S1, S2, S3…</strong>
-    <span>Sud</span>
-  </div>
-  <div class="legend-item" data-tooltip="Desserte Aéroport Roland Garros">
-    <span class="legend-dot aeroport"></span>
-    <strong>T, TX</strong>
-    <span>Aéroport</span>
-  </div>
-</div>
-
+    <div class="legend">
+      <div class="legend-title">📖 Signification</div>
+      <div class="legend-item" data-tooltip="Lignes directes, peu d'arrêts">
+        <span class="legend-dot express"></span>
+        <strong>E1X, O1X, TX</strong>
+        <span>Express</span>
+      </div>
+      <div class="legend-item" data-tooltip="Secteur Est — Saint-Benoît / Saint-André">
+        <span class="legend-dot est"></span>
+        <strong>E1, E2, E3</strong>
+        <span>Est</span>
+      </div>
+      <div class="legend-item" data-tooltip="Secteur Ouest — Saint-Paul">
+        <span class="legend-dot ouest"></span>
+        <strong>O1, O2, O3</strong>
+        <span>Ouest</span>
+      </div>
+      <div class="legend-item" data-tooltip="Secteur Sud — Saint-Pierre / Saint-Joseph">
+        <span class="legend-dot sud"></span>
+        <strong>S1, S2, S3…</strong>
+        <span>Sud</span>
+      </div>
+      <div class="legend-item" data-tooltip="Desserte Aéroport Roland Garros">
+        <span class="legend-dot aeroport"></span>
+        <strong>T, TX</strong>
+        <span>Aéroport</span>
+      </div>
+    </div>
   </aside>
+
   <main class="main" id="main">
-    <div class="loading"><div class="spin"></div>Chargement du réseau…</div>
+    <!-- ═══ MODULE INTELLIGENT ═══ -->
+    <div class="smart-widget" id="smartWidget">
+      <button class="smart-btn" id="btnLocate" title="Utiliser ma position">
+        📍 <span>Ma position</span>
+      </button>
+      <button class="smart-btn" id="btnNext" title="Prochain car">
+        🎯 <span>Prochain car</span>
+      </button>
+      <button class="smart-btn" id="btnItinerary" title="Itinéraire">
+        🗺️ <span>Itinéraire</span>
+      </button>
+      <button class="smart-btn" id="btnMap" title="Carte">
+        🗺️ <span>Carte</span>
+      </button>
+      <span class="smart-status" id="smartStatus">💡 Activez la géolocalisation</span>
+    </div>
+
+    <div class="smart-results" id="smartResults" style="display:none"></div>
+
+    <!-- Notification prompt -->
+    <div class="notif-prompt" id="notifPrompt">
+      <p><strong>🔔 Notifications</strong><br>Voulez-vous être prévenu quand le car approche ?</p>
+      <button onclick="Smart.enableNotifs()">Activer</button>
+      <button class="secondary" onclick="document.getElementById('notifPrompt').classList.remove('show')">Plus tard</button>
+    </div>
+
+    <div id="mainContent">
+      <div class="loading"><div class="spin"></div>Chargement du réseau…</div>
+    </div>
   </main>
 </div>
 
@@ -447,6 +533,12 @@ function formatDuration(min){ if (min==null) return '—'; if (min<60) return mi
 function duration(from, to){ const a = parseHM(from), b = parseHM(to); if (a==null||b==null) return null; let d = b-a; if (d<0) d += 1440; return d; }
 function dayClass(sid){ const s = (sid||'').toLowerCase(); if (s.includes('dim')||s.includes('sun')||s.includes('df')) return 'sun'; if (s.includes('sam')||s.includes('sat')) return 'sat'; return 'week'; }
 function dayLabel(sid){ const s = (sid||'').toLowerCase(); if (s.includes('dim')||s.includes('sun')||s.includes('df')) return 'Dim'; if (s.includes('sam')||s.includes('sat')) return 'Sam'; return 'Sem'; }
+function dayClassOf(sid){
+  const s = (sid||'').toLowerCase();
+  if (s.includes('dim')||s.includes('sun')||s.includes('df')) return 'sun';
+  if (s.includes('sam')||s.includes('sat')) return 'sat';
+  return 'week';
+}
 
 function getZone(code){
   const c = code.toUpperCase();
@@ -462,10 +554,13 @@ function getZoneLabel(zone){
   return {express:'⚡ Express',nord:'🔵 Nord',sud:'🟢 Sud',ouest:'🟠 Ouest',
           est:'🔴 Est',aeroport:'🟣 Aéroport',zoom:'⚫ Zoom'}[zone] || zone;
 }
-
+function getZoneIcon(zone){
+  return {express:'⚡',nord:'🔵',sud:'🟢',ouest:'🟠',est:'🔴',
+          aeroport:'🟣',zoom:'⚫'}[zone] || '';
+}
 function getZoneDescription(zone){
   return {
-    express: 'Express — direct, moins d\'arrêts',
+    express: "Express — direct, moins d'arrêts",
     nord: 'Nord — secteur Saint-Denis',
     sud: 'Sud — secteur Saint-Pierre / Saint-Joseph',
     ouest: 'Ouest — secteur Saint-Paul',
@@ -481,20 +576,16 @@ function getLineDescription(code){
     O: 'Ouest (Saint-Paul)',
     S: 'Sud (Saint-Pierre / Saint-Joseph)',
     T: 'Aéroport / Touristique',
-    ZO: 'Zoom (ancien Z\'éclair)',
+    ZO: "Zoom (ancien Z'éclair)",
   };
   const prefix = c.match(/^[A-Z]+/)?.[0] || '';
   let desc = letters[prefix] || 'Ligne interurbaine';
   if (c.endsWith('X')) desc += ' — EXPRESS';
   return desc;
 }
-function getZoneIcon(zone){
-  return {express:'⚡',nord:'🔵',sud:'🟢',ouest:'🟠',est:'🔴',
-          aeroport:'🟣',zoom:'⚫'}[zone] || '';
-}
 
 async function load(){
-  const main = document.getElementById('main');
+  const main = document.getElementById('mainContent');
   try {
     const r = await fetch(DATA_URL + '?t=' + Date.now(), {cache:'no-store'});
     if (!r.ok) throw new Error('HTTP ' + r.status);
@@ -515,7 +606,7 @@ async function load(){
     if (state.lines.length) selectLine(state.lines[0].code);
   } catch(e){
     main.innerHTML = `<div class="err"><strong>❌ ${esc(e.message)}</strong><br><br>
-      Lance : <code>python scripts/parse_car_jaune_full.py</code></div>`;
+      Lance : <code>python3 scripts/parse_car_jaune_full.py</code></div>`;
   }
 }
 
@@ -583,15 +674,6 @@ function getFilteredTrips(line){
     };
   });
 
-  // DÉDUPLICATION : même heure + arrêts + direction + jour
-  const seen = new Map();
-  trips = trips.filter(t => {
-    const key = `${t._dep}|${t._depStop}|${t._arrStop}|${t.headsign}|${t._dayLabel}`;
-    if (seen.has(key)) return false;
-    seen.set(key, true);
-    return true;
-  });
-
   if (state.filterDay !== 'all') trips = trips.filter(t => t._day === state.filterDay);
   if (state.filterDir !== 'all') trips = trips.filter(t => t.headsign === state.filterDir);
   if (state.filterHour !== 'all') {
@@ -631,7 +713,7 @@ function getFilteredTrips(line){
 }
 
 function renderMain(){
-  const main = document.getElementById('main');
+  const main = document.getElementById('mainContent');
   const line = state.lines.find(l => l.code === state.selected);
   if (!line){ main.innerHTML = ''; return; }
 
@@ -647,9 +729,6 @@ function renderMain(){
     `<option value="${esc(d)}" ${state.filterDir === d ? 'selected':''}>${esc(d)}</option>`
   ).join('');
 
-  const sortClass = (k) => state.sortKey === k ? `sorted${state.sortDir === 'desc' ? ' desc' : ''}` : '';
-
-  let lastHour = null;
   const rows = pageTrips.map((t, i) => {
     const stopRows = (t.stops || []).map((s, j) => {
       const isTerminus = j === t.stops.length - 1;
@@ -781,6 +860,7 @@ function renderMain(){
       <button class="btn primary" id="exportBtn">📥 Export CSV</button>
       <span class="count">${trips.length} / ${line.trips_count}</span>
     </div>
+
     <div class="trips-list">
       ${rows || '<div class="loading">Aucun départ pour ces filtres</div>'}
     </div>
@@ -788,17 +868,12 @@ function renderMain(){
     ${paginationHtml}
 
     <div class="hint">
-      💡 <span class="kbd">/</span> pour rechercher ·
-      <span class="kbd">←</span> <span class="kbd">→</span> pour paginer ·
-      Clic sur en-tête pour trier ·
-      Clic sur un départ pour voir les arrêts
+      💡 <span class="kbd">/</span> rechercher · <span class="kbd">←</span> <span class="kbd">→</span> paginer · Clic sur en-tête pour trier
     </div>
   `;
 
   document.getElementById('searchInput').addEventListener('input', e => {
-    state.search = e.target.value;
-    state.page = 1;
-    renderMain();
+    state.search = e.target.value; state.page = 1; renderMain();
   });
   document.getElementById('dayFilter').addEventListener('change', e => {
     state.filterDay = e.target.value; state.page = 1; renderMain();
@@ -811,16 +886,6 @@ function renderMain(){
   });
   document.getElementById('exportBtn').addEventListener('click', () => exportCsv(line, trips));
 
-  main.querySelectorAll('thead th[data-sort]').forEach(th => {
-    th.addEventListener('click', () => {
-      const k = th.dataset.sort;
-      if (state.sortKey === k) state.sortDir = state.sortDir === 'asc' ? 'desc' : 'asc';
-      else { state.sortKey = k; state.sortDir = 'asc'; }
-      renderMain();
-    });
-  });
-
-  // Clic désactivé — les arrêts sont visibles en permanence
   main.querySelectorAll('.pagination button[data-page]').forEach(b => {
     b.addEventListener('click', () => {
       const p = parseInt(b.dataset.page);
@@ -874,6 +939,426 @@ document.addEventListener('keydown', e => {
   if (e.key === 'ArrowRight'){ state.page++; renderMain(); }
   if (e.key === 'Escape'){ state.search = ''; renderMain(); }
 });
+
+// ═══════════════════════════════════════════════════════════
+// 🎯 SMART MODULE — GPS + Prochain car + Itinéraire + Carte
+// ═══════════════════════════════════════════════════════════
+
+const Smart = {
+  userPos: null,
+  nearbyStops: [],
+  favorites: JSON.parse(localStorage.getItem('carjaune:fav') || '[]'),
+  notifsEnabled: false,
+  map: null,
+
+  haversine(lat1, lon1, lat2, lon2){
+    const R = 6371000;
+    const toRad = d => d * Math.PI / 180;
+    const dLat = toRad(lat2 - lat1);
+    const dLon = toRad(lon2 - lon1);
+    const a = Math.sin(dLat/2)**2 +
+              Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+              Math.sin(dLon/2)**2;
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  },
+
+  locate(){
+    const status = document.getElementById('smartStatus');
+    const btn = document.getElementById('btnLocate');
+    status.textContent = '📍 Localisation…';
+    btn.disabled = true;
+
+    if (!navigator.geolocation){
+      status.textContent = '❌ GPS non supporté';
+      btn.disabled = false;
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      pos => {
+        this.userPos = { lat: pos.coords.latitude, lon: pos.coords.longitude };
+        const acc = Math.round(pos.coords.accuracy);
+        status.textContent = `✓ Position (±${acc} m)`;
+        btn.classList.add('active');
+        btn.disabled = false;
+        this.findNearbyStops();
+        this.showNextCars();
+        this.showNotifPrompt();
+      },
+      err => {
+        status.textContent = `❌ ${err.message}`;
+        btn.disabled = false;
+      },
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+    );
+  },
+
+  findNearbyStops(){
+    if (!this.userPos || !state.data?.stops_index) return;
+    const { lat, lon } = this.userPos;
+    const results = [];
+    for (const s of state.data.stops_index){
+      const d = this.haversine(lat, lon, s.lat, s.lon);
+      if (d <= 1000) results.push({ ...s, distance: Math.round(d) });
+    }
+    results.sort((a, b) => a.distance - b.distance);
+    this.nearbyStops = results.slice(0, 8);
+  },
+
+  getNextDepartures(stopName){
+    if (!state.data?.lines) return [];
+    const now = new Date();
+    const nowMin = now.getHours() * 60 + now.getMinutes();
+    const dow = now.getDay();
+    const todayClass = dow === 0 ? 'sun' : (dow === 6 ? 'sat' : 'week');
+
+    const results = [];
+    for (const line of state.data.lines){
+      for (const dep of line.departures){
+        const dClass = dayClassOf(dep.service_id);
+        if (dClass !== todayClass) continue;
+
+        const idx = dep.stops.findIndex(s => s.stop === stopName);
+        if (idx === -1) continue;
+
+        const depTime = dep.stops[idx].dep;
+        const hm = parseHM(depTime);
+        if (hm == null) continue;
+
+        let wait = hm - nowMin;
+        if (wait < 0) wait += 1440;
+        if (wait > 240) continue;
+
+        results.push({
+          line: line.code,
+          lineName: line.name,
+          headsign: dep.headsign,
+          stop: stopName,
+          time: depTime,
+          wait: wait,
+          tripId: dep.trip_id,
+          stopsLeft: dep.stops.length - idx - 1,
+          arrTime: dep.stops[dep.stops.length-1].arr,
+        });
+      }
+    }
+    results.sort((a, b) => a.wait - b.wait);
+    return results.slice(0, 10);
+  },
+
+  showNextCars(){
+    const el = document.getElementById('smartResults');
+    el.style.display = 'block';
+
+    if (!this.userPos){
+      el.innerHTML = `
+        <div class="smart-results-head">
+          <h3>📍 Activez la géolocalisation</h3>
+          <button class="close" onclick="document.getElementById('smartResults').style.display='none'">✕</button>
+        </div>
+        <div class="smart-results-body">
+          <p style="font-size:13px;color:var(--g700);padding:14px 18px;line-height:1.7">
+            Cliquez sur <strong>📍 Ma position</strong> pour voir les prochains cars autour de vous.
+          </p>
+        </div>`;
+      return;
+    }
+
+    if (!this.nearbyStops.length){
+      el.innerHTML = `
+        <div class="smart-results-head">
+          <h3>😕 Aucun arrêt à proximité</h3>
+          <button class="close" onclick="document.getElementById('smartResults').style.display='none'">✕</button>
+        </div>
+        <div class="smart-results-body">
+          <p style="font-size:13px;color:var(--g700);padding:14px 18px">
+            Aucun arrêt Car Jaune dans un rayon de 1 km.
+          </p>
+        </div>`;
+      return;
+    }
+
+    const closest = this.nearbyStops[0];
+    const next = this.getNextDepartures(closest.name);
+
+    let html = `
+      <div class="smart-results-head">
+        <h3>🎯 Prochain car à <strong>${esc(closest.name)}</strong></h3>
+        <span class="dist">à ${closest.distance} m</span>
+        <button class="close" onclick="document.getElementById('smartResults').style.display='none'">✕</button>
+      </div>
+      <div class="smart-results-body">`;
+
+    if (!next.length){
+      html += `<p style="font-size:13px;color:var(--g500);padding:14px 18px">
+        Aucun car dans les 4 prochaines heures.</p>`;
+    } else {
+      html += next.map(n => {
+        const wClass = n.wait <= 5 ? 'very-soon' : (n.wait <= 15 ? 'soon' : '');
+        const waitLabel = n.wait === 0 ? 'maintenant'
+                       : n.wait < 60 ? `dans ${n.wait} min`
+                       : `dans ${Math.floor(n.wait/60)}h${String(n.wait%60).padStart(2,'0')}`;
+        return `
+          <div class="next-car" onclick="Smart.selectLine('${esc(n.line)}')">
+            <div class="code">${esc(n.line)}</div>
+            <div class="route">
+              → ${esc(n.headsign || '—')}
+              <small>${esc(n.time)} · ${n.stopsLeft} arrêts restants · arrivée ${esc(n.arrTime)}</small>
+            </div>
+            <div class="time ${wClass}">${esc(n.time)}</div>
+            <div class="wait ${wClass}">${waitLabel}</div>
+          </div>`;
+      }).join('');
+    }
+    html += `</div>`;
+
+    if (this.nearbyStops.length > 1){
+      html += `
+        <details class="smart-extra">
+          <summary>📍 Voir les ${this.nearbyStops.length - 1} autres arrêts proches</summary>
+          <div style="padding:8px 0">
+            ${this.nearbyStops.slice(1).map(s => `
+              <div class="stop-row" onclick="Smart.showNextCarsFor('${esc(s.name)}')">
+                <span class="name">${esc(s.name)}</span>
+                <span class="meta">${s.distance} m · ${s.lines.join(', ')}</span>
+              </div>
+            `).join('')}
+          </div>
+        </details>`;
+    }
+
+    el.innerHTML = html;
+  },
+
+  showNextCarsFor(stopName){
+    const el = document.getElementById('smartResults');
+    const next = this.getNextDepartures(stopName);
+    const stop = this.nearbyStops.find(s => s.name === stopName);
+
+    let html = `
+      <div class="smart-results-head">
+        <h3>🎯 Prochain car à <strong>${esc(stopName)}</strong></h3>
+        <span class="dist">à ${stop?.distance || '?'} m</span>
+        <button class="close" onclick="document.getElementById('smartResults').style.display='none'">✕</button>
+      </div>
+      <div class="smart-results-body">`;
+
+    if (!next.length){
+      html += `<p style="font-size:13px;color:var(--g500);padding:14px 18px">
+        Aucun car dans les 4 prochaines heures.</p>`;
+    } else {
+      html += next.map(n => {
+        const wClass = n.wait <= 5 ? 'very-soon' : (n.wait <= 15 ? 'soon' : '');
+        const waitLabel = n.wait === 0 ? 'maintenant'
+                       : n.wait < 60 ? `dans ${n.wait} min`
+                       : `dans ${Math.floor(n.wait/60)}h${String(n.wait%60).padStart(2,'0')}`;
+        return `
+          <div class="next-car" onclick="Smart.selectLine('${esc(n.line)}')">
+            <div class="code">${esc(n.line)}</div>
+            <div class="route">
+              → ${esc(n.headsign || '—')}
+              <small>${esc(n.time)} · ${n.stopsLeft} arrêts · arrivée ${esc(n.arrTime)}</small>
+            </div>
+            <div class="time ${wClass}">${esc(n.time)}</div>
+            <div class="wait ${wClass}">${waitLabel}</div>
+          </div>`;
+      }).join('');
+    }
+    html += `</div>`;
+    el.innerHTML = html;
+  },
+
+  showMap(){
+    const el = document.getElementById('smartResults');
+    el.style.display = 'block';
+
+    el.innerHTML = `
+      <div class="smart-results-head">
+        <h3>🗺️ Carte du réseau Car Jaune</h3>
+        <button class="close" onclick="document.getElementById('smartResults').style.display='none'">✕</button>
+      </div>
+      <div style="padding:14px 18px">
+        <div id="map"></div>
+      </div>`;
+
+    setTimeout(() => this.initMap(), 100);
+  },
+
+  initMap(){
+    if (this.map){ this.map.remove(); this.map = null; }
+
+    const center = this.userPos
+      ? [this.userPos.lat, this.userPos.lon]
+      : [-21.115, 55.536];
+
+    this.map = L.map('map').setView(center, this.userPos ? 14 : 9);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap',
+      maxZoom: 18,
+    }).addTo(this.map);
+
+    if (this.userPos){
+      L.circleMarker([this.userPos.lat, this.userPos.lon], {
+        radius: 8, color: '#0055a4', fillColor: '#0077dd',
+        fillOpacity: 1, weight: 3,
+      }).addTo(this.map).bindPopup('<strong>📍 Vous êtes ici</strong>');
+    }
+
+    if (this.nearbyStops.length){
+      for (const s of this.nearbyStops){
+        const isClosest = s === this.nearbyStops[0];
+        L.circleMarker([s.lat, s.lon], {
+          radius: isClosest ? 7 : 5,
+          color: isClosest ? '#00a95f' : '#0055a4',
+          fillColor: isClosest ? '#00a95f' : '#0077dd',
+          fillOpacity: 0.9,
+          weight: 2,
+        }).addTo(this.map).bindPopup(
+          `<strong>${esc(s.name)}</strong><br>📏 ${s.distance} m<br>🚌 ${s.lines.join(', ')}`
+        );
+      }
+    }
+  },
+
+  showItinerary(){
+    const el = document.getElementById('smartResults');
+    el.style.display = 'block';
+
+    el.innerHTML = `
+      <div class="smart-results-head">
+        <h3>🗺️ Calculer un itinéraire</h3>
+        <button class="close" onclick="document.getElementById('smartResults').style.display='none'">✕</button>
+      </div>
+      <div class="itinerary-form">
+        <input type="text" id="itinFrom" placeholder="Départ (ex: St-Benoît)" value="${this.nearbyStops[0]?.name || ''}">
+        <input type="text" id="itinTo" placeholder="Arrivée (ex: St-Denis)">
+        <button onclick="Smart.computeItinerary()">🔍 Chercher</button>
+      </div>
+      <div id="itinResult"></div>`;
+  },
+
+  computeItinerary(){
+    const from = document.getElementById('itinFrom').value.trim();
+    const to = document.getElementById('itinTo').value.trim();
+    const result = document.getElementById('itinResult');
+
+    if (!from || !to){
+      result.innerHTML = '<div class="itinerary-result" style="color:var(--red)">❌ Remplissez les deux champs</div>';
+      return;
+    }
+
+    const now = new Date();
+    const nowMin = now.getHours() * 60 + now.getMinutes();
+    const dow = now.getDay();
+    const todayClass = dow === 0 ? 'sun' : (dow === 6 ? 'sat' : 'week');
+
+    const routes = [];
+    for (const line of state.data.lines){
+      for (const dep of line.departures){
+        const dClass = dayClassOf(dep.service_id);
+        if (dClass !== todayClass) continue;
+
+        const idxFrom = dep.stops.findIndex(s => normalize(s.stop).includes(normalize(from)));
+        const idxTo = dep.stops.findIndex(s => normalize(s.stop).includes(normalize(to)));
+        if (idxFrom === -1 || idxTo === -1) continue;
+        if (idxFrom >= idxTo) continue;
+
+        const depTime = dep.stops[idxFrom].dep;
+        const arrTime = dep.stops[idxTo].arr;
+        const hm = parseHM(depTime);
+        if (hm == null) continue;
+
+        let wait = hm - nowMin;
+        if (wait < 0) wait += 1440;
+        if (wait > 240) continue;
+
+        routes.push({
+          line: line.code,
+          headsign: dep.headsign,
+          from: dep.stops[idxFrom].stop,
+          to: dep.stops[idxTo].stop,
+          depTime, arrTime, wait,
+          dur: duration(depTime, arrTime),
+          stops: idxTo - idxFrom,
+        });
+      }
+    }
+
+    routes.sort((a, b) => a.wait - b.wait);
+
+    if (!routes.length){
+      result.innerHTML = `<div class="itinerary-result" style="color:var(--red)">
+        ❌ Aucun trajet direct trouvé de <strong>${esc(from)}</strong> à <strong>${esc(to)}</strong> dans les 4 prochaines heures.
+      </div>`;
+      return;
+    }
+
+    const best = routes[0];
+    result.innerHTML = `
+      <div class="itinerary-result">
+        <div class="step"><span class="icon">🚏</span>
+          <span class="txt">Départ de <strong>${esc(best.from)}</strong> à <strong>${esc(best.depTime)}</strong></span>
+        </div>
+        <div class="step"><span class="icon">🚌</span>
+          <span class="txt">Prendre la ligne <strong>${esc(best.line)}</strong> direction <strong>${esc(best.headsign)}</strong></span>
+        </div>
+        <div class="step"><span class="icon">⏱️</span>
+          <span class="txt">${best.stops} arrêts · durée <strong>${formatDuration(best.dur)}</strong></span>
+        </div>
+        <div class="step"><span class="icon">🏁</span>
+          <span class="txt">Arrivée à <strong>${esc(best.to)}</strong> à <strong>${esc(best.arrTime)}</strong></span>
+        </div>
+        <div style="margin-top:10px;padding:10px;background:var(--green-soft);
+                    border-radius:6px;font-size:12px;color:var(--green);font-weight:700">
+          💡 Prochain car dans ${best.wait} min
+        </div>
+      </div>`;
+  },
+
+  showNotifPrompt(){
+    if (this.notifsEnabled || !('Notification' in window)) return;
+    if (Notification.permission === 'granted'){ this.notifsEnabled = true; return; }
+    if (Notification.permission === 'denied') return;
+    document.getElementById('notifPrompt').classList.add('show');
+  },
+
+  enableNotifs(){
+    if (!('Notification' in window)) return;
+    Notification.requestPermission().then(perm => {
+      if (perm === 'granted'){
+        this.notifsEnabled = true;
+        new Notification('🚌 Car Jaune 974', {
+          body: 'Notifications activées ! Vous serez prévenu 5 min avant votre car.',
+        });
+      }
+      document.getElementById('notifPrompt').classList.remove('show');
+    });
+  },
+
+  selectLine(code){
+    selectLine(code);
+    document.getElementById('smartResults').style.display = 'none';
+  },
+};
+
+document.getElementById('btnLocate')?.addEventListener('click', () => Smart.locate());
+document.getElementById('btnNext')?.addEventListener('click', () => {
+  if (!Smart.userPos) Smart.locate();
+  else Smart.showNextCars();
+});
+document.getElementById('btnItinerary')?.addEventListener('click', () => Smart.showItinerary());
+document.getElementById('btnMap')?.addEventListener('click', () => {
+  if (!Smart.userPos) { Smart.locate(); setTimeout(() => Smart.showMap(), 1500); }
+  else Smart.showMap();
+});
+
+setTimeout(() => {
+  if (navigator.geolocation && !Smart.userPos){
+    const status = document.getElementById('smartStatus');
+    if (status) status.textContent = '💡 Cliquez sur 📍 Ma position';
+  }
+}, 800);
 
 load();
 </script>
