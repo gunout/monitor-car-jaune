@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🚌 Car Jaune — Monitor Réseau Interurbain 974</title>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --cj-blue:#0055a4; --cj-blue-hi:#0077dd; --cj-blue-soft:#e6f0fa;
+  --cj-yellow:#ffcc00; --cj-yellow-soft:#fff8e0;
+  --cj-red:#e1000f; --cj-green:#00a95f;
+  --white:#fff; --g50:#f6f6f6; --g100:#eee; --g200:#e5e5e5;
+  --g500:#929292; --g700:#3a3a3a; --g900:#1e1e1e;
+  --mono:'SF Mono',Menlo,Consolas,'Courier New',monospace;
+  --sans:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+}
+html{height:100%}
+body{font-family:var(--sans);background:var(--g50);color:var(--g900);
+  font-size:13px;line-height:1.5;min-height:100%;overflow-x:hidden;
+  -webkit-font-smoothing:antialiased}
+::-webkit-scrollbar{width:8px;height:8px}
+::-webkit-scrollbar-track{background:var(--g100)}
+::-webkit-scrollbar-thumb{background:var(--g500);border-radius:4px}
+::-webkit-scrollbar-thumb:hover{background:var(--cj-blue)}
+
+/* Bandeau Car Jaune */
+.cj-band{height:6px;background:linear-gradient(to right,
+  var(--cj-blue) 0%,var(--cj-blue) 33%,
+  var(--cj-yellow) 33%,var(--cj-yellow) 66%,
+  var(--cj-red) 66%,var(--cj-red) 100%)}
+
+/* Header */
+.cj-header{background:linear-gradient(135deg,var(--cj-blue) 0%,var(--cj-blue-hi) 100%);
+  color:var(--white);padding:18px 24px;
+  box-shadow:0 4px 12px rgba(0,85,164,.25);position:sticky;top:6px;z-index:100}
+.cj-header-top{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.cj-logo{font-size:26px;font-weight:900;letter-spacing:1px;
+  display:flex;align-items:center;gap:12px;
+  text-shadow:0 2px 4px rgba(0,0,0,.15)}
+.cj-logo .badge{background:var(--cj-yellow);color:var(--cj-blue);
+  padding:4px 12px;border-radius:6px;font-size:13px;
+  font-family:var(--mono);font-weight:800;letter-spacing:1px}
+.cj-logo .sub{font-size:12px;font-weight:400;opacity:.85;
+  font-family:var(--mono);letter-spacing:.5px}
+.cj-header-stats{margin-left:auto;display:flex;gap:12px;flex-wrap:wrap}
+.cj-stat{background:rgba(255,255,255,.15);backdrop-filter:blur(4px);
+  padding:8px 14px;border-radius:6px;border:1px solid rgba(255,255,255,.2);
+  display:flex;flex-direction:column;gap:2px;min-width:90px}
+.cj-stat .lbl{font-size:9px;text-transform:uppercase;letter-spacing:1px;
+  opacity:.8;font-family:var(--mono)}
+.cj-stat .val{font-size:18px;font-weight:800;font-family:var(--mono);
+  line-height:1}
+.cj-stat .val.yellow{color:var(--cj-yellow)}
+
+/* Toolbar */
+.cj-toolbar{background:var(--white);padding:14px 24px;
+  border-bottom:1px solid var(--g200);display:flex;gap:10px;
+  flex-wrap:wrap;align-items:center;
+  box-shadow:0 2px 6px rgba(0,0,0,.04)}
+.cj-search{flex:1;min-width:200px;position:relative}
+.cj-search input{width:100%;padding:10px 14px 10px 38px;
+  border:1px solid var(--g200);border-radius:6px;font-size:14px;
+  font-family:var(--sans);background:var(--white)}
+.cj-search input:focus{outline:none;border-color:var(--cj-blue);
+  box-shadow:0 0 0 3px var(--cj-blue-soft)}
+.cj-search::before{content:'🔍';position:absolute;left:12px;top:50%;
+  transform:translateY(-50%);font-size:14px;opacity:.6;pointer-events:none}
+.cj-filter{display:flex;gap:4px;background:var(--g100);
+  padding:3px;border-radius:6px}
+.cj-filter button{background:transparent;border:none;padding:7px 14px;
+  border-radius:4px;cursor:pointer;font-size:12px;font-weight:600;
+  color:var(--g700);transition:all .15s;font-family:var(--sans);
+  white-space:nowrap}
+.cj-filter button:hover{background:var(--white);color:var(--cj-blue)}
+.cj-filter button.active{background:var(--cj-blue);color:var(--white);
+  box-shadow:0 1px 3px rgba(0,85,164,.3)}
+.cj-refresh{background:var(--cj-yellow);color:var(--cj-blue);
+  border:none;padding:10px 18px;border-radius:6px;cursor:pointer;
+  font-size:13px;font-weight:800;font-family:var(--sans);
+  letter-spacing:.5px;transition:all .15s;
+  box-shadow:0 2px 6px rgba(255,204,0,.3)}
+.cj-refresh:hover{background:#ffdb4d;transform:translateY(-1px);
+  box-shadow:0 4px 10px rgba(255,204,0,.4)}
+
+/* Layout */
+.cj-app{display:grid;grid-template-columns:240px 1fr;
+  min-height:calc(100vh - 200px);gap:0}
+
+/* Sidebar lignes */
+.cj-sidebar{background:var(--white);border-right:1px solid var(--g200);
+  padding:14px 0;overflow-y:auto;max-height:calc(100vh - 200px);
+  position:sticky;top:150px;align-self:start}
+.cj-sidebar-title{padding:0 18px 12px;font-size:10px;
+  text-transform:uppercase;letter-spacing:1.5px;color:var(--g500);
+  font-family:var(--mono);font-weight:700;
+  border-bottom:1px solid var(--g100);margin-bottom:8px}
+.cj-line-btn{display:flex;align-items:center;gap:10px;
+  padding:10px 18px;cursor:pointer;transition:all .15s;
+  border-left:3px solid transparent;font-size:12px}
+.cj-line-btn:hover{background:var(--cj-blue-soft);
+  border-left-color:var(--cj-blue)}
+.cj-line-btn.active{background:var(--cj-blue-soft);
+  border-left-color:var(--cj-blue);font-weight:700}
+.cj-line-code{background:var(--cj-blue);color:var(--white);
+  padding:3px 10px;border-radius:4px;font-family:var(--mono);
+  font-size:11px;font-weight:800;letter-spacing:.5px;
+  min-width:42px;text-align:center;flex-shrink:0}
+.cj-line-btn.active .cj-line-code{background:var(--cj-yellow);
+  color:var(--cj-blue)}
+.cj-line-name{flex:1;overflow:hidden;text-overflow:ellipsis;
+  white-space:nowrap;color:var(--g700)}
+
+/* Main */
+.cj-main{padding:20px 24px;overflow-y:auto;
+  max-height:calc(100vh - 200px)}
+.cj-main-header{display:flex;align-items:baseline;gap:12px;
+  margin-bottom:18px;flex-wrap:wrap}
+.cj-main-title{font-size:22px;font-weight:800;color:var(--g900);
+  display:flex;align-items:center;gap:12px}
+.cj-main-title .code{background:var(--cj-blue);color:var(--white);
+  padding:6px 16px;border-radius:6px;font-family:var(--mono);
+  font-size:18px;font-weight:900;letter-spacing:1px}
+.cj-main-meta{display:flex;gap:8px;flex-wrap:wrap;
+  font-family:var(--mono);font-size:11px;color:var(--g500);
+  margin-bottom:16px}
+.cj-main-meta .tag{background:var(--white);padding:4px 10px;
+  border-radius:4px;border:1px solid var(--g200);color:var(--g700)}
+
+/* Directions */
+.cj-directions{display:flex;gap:10px;margin-bottom:18px;
+  flex-wrap:wrap}
+.cj-dir-card{flex:1;min-width:220px;background:var(--white);
+  border-radius:8px;padding:14px 16px;
+  border-left:4px solid var(--cj-blue);
+  box-shadow:0 2px 6px rgba(0,0,0,.05);transition:all .15s}
+.cj-dir-card:hover{box-shadow:0 4px 12px rgba(0,85,164,.12);
+  transform:translateY(-2px)}
+.cj-dir-card .lbl{font-size:9px;text-transform:uppercase;
+  letter-spacing:1px;color:var(--g500);font-family:var(--mono);
+  font-weight:700;margin-bottom:6px}
+.cj-dir-card .dir{font-size:13px;font-weight:700;color:var(--g900);
+  line-height:1.35}
+
+/* Arrêts */
+.cj-stops{background:var(--white);border-radius:8px;
+  overflow:hidden;box-shadow:0 2px 6px rgba(0,0,0,.05)}
+.cj-stops-head{padding:12px 18px;background:var(--g50);
+  border-bottom:1px solid var(--g200);display:flex;
+  justify-content:space-between;align-items:center;
+  font-size:11px;text-transform:uppercase;letter-spacing:1px;
+  color:var(--g500);font-family:var(--mono);font-weight:700}
+.cj-stop{display:grid;grid-template-columns:40px 1fr 90px 90px;
+  padding:11px 18px;border-bottom:1px solid var(--g100);
+  align-items:center;font-size:13px;transition:all .1s}
+.cj-stop:last-child{border-bottom:none}
+.cj-stop:hover{background:var(--cj-blue-soft)}
+.cj-stop .seq{font-family:var(--mono);font-size:10px;
+  color:var(--g500);font-weight:700}
+.cj-stop .name{color:var(--g900);font-weight:500;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  padding-right:12px}
+.cj-stop .time{font-family:var(--mono);font-size:12px;
+  color:var(--cj-blue);font-weight:800;text-align:center;
+  background:var(--cj-blue-soft);padding:4px 8px;border-radius:4px}
+.cj-stop .time.arr{background:var(--g100);color:var(--g700)}
+.cj-stop .km{font-family:var(--mono);font-size:11px;
+  color:var(--g500);text-align:right}
+
+/* Empty state */
+.cj-empty{text-align:center;padding:80px 20px;color:var(--g500)}
+.cj-empty .icon{font-size:64px;margin-bottom:20px;opacity:.4}
+.cj-empty h3{font-size:18px;color:var(--g700);margin-bottom:10px}
+.cj-empty p{font-size:13px;line-height:1.7}
+.cj-empty code{background:var(--g100);padding:3px 8px;
+  border-radius:3px;font-family:var(--mono);font-size:12px;
+  color:var(--cj-blue)}
+
+/* Loading */
+.cj-loading{text-align:center;padding:80px 20px;color:var(--g500)}
+.cj-spin{width:48px;height:48px;border:4px solid var(--g200);
+  border-top-color:var(--cj-blue);border-radius:50%;
+  animation:cj-spin .8s linear infinite;margin:0 auto 16px}
+@keyframes cj-spin{to{transform:rotate(360deg)}}
+
+/* Error */
+.cj-error{background:#fff5f5;border:1px solid var(--cj-red);
+  border-left:4px solid var(--cj-red);padding:20px;
+  border-radius:6px;color:var(--cj-red);font-size:13px;
+  margin:20px}
+.cj-error strong{display:block;margin-bottom:8px;font-size:14px}
+
+/* Responsive */
+@media(max-width:900px){
+  .cj-app{grid-template-columns:1fr}
+  .cj-sidebar{position:static;max-height:200px;
+    border-right:none;border-bottom:1px solid var(--g200)}
+  .cj-main{max-height:none}
+  .cj-header-stats{width:100%;margin-top:12px}
+  .cj-stop{grid-template-columns:30px 1fr 70px}
+  .cj-stop .km{display:none}
+}
+</style>
+</head>
+<body>
+
+<div class="cj-band"></div>
+
+<header class="cj-header">
+  <div class="cj-header-top">
+    <div class="cj-logo">
+      🚌 <span>CAR JAUNE</span>
+      <span class="badge">974</span>
+      <span class="sub">Réseau interurbain · La Réunion</span>
+    </div>
+    <div class="cj-header-stats" id="headerStats">
+      <div class="cj-stat"><span class="lbl">Lignes</span><span class="val yellow" id="statLines">—</span></div>
+      <div class="cj-stat"><span class="lbl">Arrêts</span><span class="val" id="statStops">—</span></div>
+      <div class="cj-stat"><span class="lbl">Trajets</span><span class="val" id="statTrips">—</span></div>
+      <div class="cj-stat"><span class="lbl">Passages</span><span class="val" id="statPassages">—</span></div>
+    </div>
+  </div>
+
+  <div style="background:rgba(255,204,0,.15);border:1px solid rgba(255,204,0,.4);
+              padding:10px 14px;border-radius:6px;margin-top:12px;
+              font-size:12px;color:var(--white);line-height:1.5">
+    ℹ️ Le GTFS officiel contient <strong>16 lignes</strong> interurbaines.
+    Les lignes scolaires <strong>S21* (St-Pierre ↔ Université Tampon)</strong>,
+    <strong>S31 (St-Joseph ↔ St-Pierre)</strong> et
+    <strong>S51 (Entre-Deux ↔ St-Louis)</strong> ne sont pas incluses
+    dans l'export HASTUS 2020.
+  </div>
+
+</header>
+
+<div class="cj-toolbar">
+  <div class="cj-search">
+    <input type="text" id="searchInput" placeholder="Rechercher une ligne, un arrêt, une destination…" autocomplete="off">
+  </div>
+  <div class="cj-filter" id="typeFilter">
+    <button data-filter="all" class="active">Toutes</button>
+    <button data-filter="E">Express E</button>
+    <button data-filter="O">Ouest O</button>
+    <button data-filter="S">Sud S</button>
+    <button data-filter="T">Aéroport T</button>
+    <button data-filter="Z">Zoom ZO</button>
+  </div>
+  <button class="cj-refresh" id="refreshBtn">⟳ Actualiser</button>
+</div>
+
+<div class="cj-app">
+  <aside class="cj-sidebar">
+    <div class="cj-sidebar-title">Lignes du réseau</div>
+    <div id="lineList"></div>
+  </aside>
+
+  <main class="cj-main" id="mainArea">
+    <div class="cj-loading">
+      <div class="cj-spin"></div>
+      Chargement du réseau Car Jaune…
+    </div>
+  </main>
+</div>
+
+<script>
+const DATA_URL = 'data/car_jaune.json';
+
+const state = {
+  data: null,
+  lines: [],
+  filteredLines: [],
+  selectedCode: null,
+  search: '',
+  filter: 'all',
+};
+
+function escapeHtml(s){
+  return String(s ?? '').replace(/[&<>"']/g, c => ({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  }[c]));
+}
+
+function normalize(str){
+  if (!str) return '';
+  return str.toString().toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/\s+/g, ' ').trim();
+}
+
+function lineMatchesFilter(code){
+  const f = state.filter;
+  if (f === 'all') return true;
+  const c = code.toUpperCase();
+  if (f === 'Z') return c.startsWith('Z');
+  return c.startsWith(f);
+}
+
+function lineMatchesSearch(line){
+  const q = normalize(state.search);
+  if (!q) return true;
+  const hay = normalize([
+    line.code, line.name,
+    ...(line.directions || [])
+  ].join(' '));
+  return hay.includes(q);
+}
+
+async function loadData(){
+  const main = document.getElementById('mainArea');
+  main.innerHTML = '<div class="cj-loading"><div class="cj-spin"></div>Chargement du réseau Car Jaune…</div>';
+  try {
+    const r = await fetch(DATA_URL + '?t=' + Date.now(), { cache: 'no-store' });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const data = await r.json();
+    state.data = data;
+    state.lines = (data.lines || []).sort((a, b) =>
+      a.code.localeCompare(b.code, 'fr', { numeric: true })
+    );
+    renderHeaderStats();
+    applyFilters();
+    if (state.filteredLines.length > 0 && !state.selectedCode){
+      selectLine(state.filteredLines[0].code);
+    } else {
+      renderMain();
+    }
+  } catch(e){
+    main.innerHTML = `
+      <div class="cj-error">
+        <strong>❌ Impossible de charger le réseau Car Jaune</strong>
+        ${escapeHtml(e.message)}<br><br>
+        Vérifiez que le fichier <code>data/car_jaune.json</code> existe.<br>
+        Pour le générer :<br>
+        <code style="display:block;background:#fff;padding:8px;margin-top:8px;border-radius:3px;font-family:var(--mono)">
+          python scripts/fetch_car_jaune.py<br>
+          python scripts/parse_car_jaune.py
+        </code>
+      </div>
+    `;
+  }
+}
+
+function renderHeaderStats(){
+  const c = state.data?.counts || {};
+  document.getElementById('statLines').textContent = c.lines || state.lines.length || '—';
+  document.getElementById('statStops').textContent = c.stops || '—';
+  document.getElementById('statTrips').textContent = c.trips || '—';
+  document.getElementById('statPassages').textContent = (c.stop_times || 0).toLocaleString('fr-FR') || '—';
+}
+
+function applyFilters(){
+  state.filteredLines = state.lines.filter(l =>
+    lineMatchesFilter(l.code) && lineMatchesSearch(l)
+  );
+  renderSidebar();
+  if (state.selectedCode){
+    const stillExists = state.filteredLines.some(l => l.code === state.selectedCode);
+    if (!stillExists) state.selectedCode = state.filteredLines[0]?.code || null;
+  }
+  renderMain();
+}
+
+function renderSidebar(){
+  const list = document.getElementById('lineList');
+  if (state.filteredLines.length === 0){
+    list.innerHTML = '<div style="padding:20px;text-align:center;color:var(--g500);font-size:12px">Aucune ligne</div>';
+    return;
+  }
+  list.innerHTML = state.filteredLines.map(l => `
+    <div class="cj-line-btn ${l.code === state.selectedCode ? 'active' : ''}"
+         data-code="${escapeHtml(l.code)}">
+      <span class="cj-line-code">${escapeHtml(l.code)}</span>
+      <span class="cj-line-name" title="${escapeHtml(l.name)}">${escapeHtml(l.name)}</span>
+    </div>
+  `).join('');
+
+  list.querySelectorAll('.cj-line-btn').forEach(el => {
+    el.addEventListener('click', () => selectLine(el.dataset.code));
+  });
+}
+
+function selectLine(code){
+  state.selectedCode = code;
+  renderSidebar();
+  renderMain();
+  document.getElementById('mainArea').scrollTop = 0;
+}
+
+function renderMain(){
+  const main = document.getElementById('mainArea');
+  if (!state.selectedCode){
+    main.innerHTML = `
+      <div class="cj-empty">
+        <div class="icon">🚌</div>
+        <h3>Sélectionnez une ligne</h3>
+        <p>Choisissez une ligne dans la liste à gauche<br>pour voir ses arrêts et horaires.</p>
+      </div>
+    `;
+    return;
+  }
+
+  const line = state.filteredLines.find(l => l.code === state.selectedCode)
+            || state.lines.find(l => l.code === state.selectedCode);
+  if (!line){
+    main.innerHTML = '<div class="cj-empty"><div class="icon">❓</div><h3>Ligne introuvable</h3></div>';
+    return;
+  }
+
+  const color = line.color ? '#' + line.color.replace('#','') : '#0055a4';
+  const dirsHtml = (line.directions || []).length
+    ? line.directions.map((d, i) => `
+        <div class="cj-dir-card">
+          <div class="lbl">Direction ${i+1}</div>
+          <div class="dir">${escapeHtml(d)}</div>
+        </div>
+      `).join('')
+    : '<div class="cj-dir-card"><div class="lbl">Direction</div><div class="dir">—</div></div>';
+
+  const stopsHtml = (line.sample_stops || []).map((s, i) => {
+    const time = s.time || '';
+    const [h, m] = time.split(':');
+    const display = h && m ? `${h}:${m}` : '—';
+    return `
+      <div class="cj-stop">
+        <span class="seq">${String(i+1).padStart(2,'0')}</span>
+        <span class="name" title="${escapeHtml(s.stop)}">${escapeHtml(s.stop)}</span>
+        <span class="time">${escapeHtml(display)}</span>
+        <span class="km">—</span>
+      </div>
+    `;
+  }).join('');
+
+  main.innerHTML = `
+    <div class="cj-main-header">
+      <div class="cj-main-title">
+        <span class="code" style="background:${color}">${escapeHtml(line.code)}</span>
+        ${escapeHtml(line.name)}
+      </div>
+    </div>
+    <div class="cj-main-meta">
+      <span class="tag">🚏 ${line.trips_count} trajets</span>
+      <span class="tag">📍 ${line.stops_count} arrêts</span>
+      <span class="tag">🧭 ${(line.directions || []).length} sens</span>
+      ${line.route_ids ? `<span class="tag">🔖 ${line.route_ids.length} route_id</span>` : ''}
+    </div>
+
+    <div class="cj-directions">${dirsHtml}</div>
+
+    <div class="cj-stops">
+      <div class="cj-stops-head">
+        <span>🕐 Arrêts et horaires (trajet type)</span>
+        <span>${line.stops_count} arrêts</span>
+      </div>
+      ${stopsHtml}
+    </div>
+  `;
+}
+
+document.getElementById('searchInput').addEventListener('input', e => {
+  state.search = e.target.value;
+  applyFilters();
+});
+
+document.getElementById('typeFilter').addEventListener('click', e => {
+  const btn = e.target.closest('button');
+  if (!btn) return;
+  document.querySelectorAll('#typeFilter button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  state.filter = btn.dataset.filter;
+  applyFilters();
+});
+
+document.getElementById('refreshBtn').addEventListener('click', loadData);
+
+loadData();
+</script>
+</body>
+</html>

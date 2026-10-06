@@ -1,0 +1,1578 @@
+{
+  "source": "GTFS Car Jaune (HASTUS)",
+  "zip": "01_CAR__JAUNE_-_Région_Réunion.zip",
+  "generated_at": "2026-10-06T21:43:10+0400",
+  "counts": {
+    "lines": 16,
+    "routes_gtfs": 32,
+    "stops": 295,
+    "trips": 1978,
+    "stop_times": 31586
+  },
+  "agency": [
+    {
+      "agency_name": "CAR JAUNE",
+      "agency_url": "http://www.giro.ca",
+      "agency_timezone": "America/Montreal",
+      "agency_lang": "",
+      "agency_phone": ""
+    }
+  ],
+  "lines": [
+    {
+      "code": "E1",
+      "name": "SAINT-BENOIT / SAINT-DENIS par le Chaudron",
+      "type": "3",
+      "color": "",
+      "text_color": "",
+      "route_ids": [
+        "E1-11",
+        "E1-13"
+      ],
+      "directions": [
+        "St-Denis",
+        "St-Benoît"
+      ],
+      "trips_count": 112,
+      "stops_count": 9,
+      "sample_stops": [
+        {
+          "stop": "Gare De St-Benoit",
+          "time": "05:00:00",
+          "sequence": "1"
+        },
+        {
+          "stop": "Mairie de Bras Panon",
+          "time": "05:09:00",
+          "sequence": "2"
+        },
+        {
+          "stop": "Gare De St-André",
+          "time": "05:16:00",
+          "sequence": "3"
+        },
+        {
+          "stop": "Ecole Quartier Français",
+          "time": "05:24:00",
+          "sequence": "4"
+        },
+        {
+          "stop": "Pôle D'échanges Duparc",
+          "time": "05:38:00",
+          "sequence": "7"
+        },
+        {
+          "stop": "Gillot",
+          "time": "05:39:00",
+          "sequence": "8"
+        },
+        {
+          "stop": "Stade De L'Est",
+          "time": "05:42:00",
+          "sequence": "9"
+        },
+        {
+          "stop": "Chaudron",
+          "time": "05:45:00",
+          "sequence": "10"
+        },
+        {
+          "stop": "Gare De St-Denis",
+          "time": "05:50:00",
+          "sequence": "11"
+        }
+      ]
+    },
+    {
+      "code": "E2",
+      "name": "SAINT-BENOIT / SAINT-DENIS par le Bd Sud",
+      "type": "3",
+      "color": "",
+      "text_color": "",
+      "route_ids": [
+        "E2-11",
+        "E2-13"
+      ],
+      "directions": [
+        "St-Denis",
+        "St-Benoît"
+      ],
+      "trips_count": 184,
+      "stops_count": 18,
+      "sample_stops": [
+        {
+          "stop": "Gare De St-Denis",
+          "time": "05:30:00",
+          "sequence": "1"
+        },
+        {
+          "stop": "St-Jacques",
+          "time": "05:32:00",
+          "sequence": "2"
+        },
+        {
+          "stop": "Butor",
+          "time": "05:34:00",
+          "sequence": "3"
+        },
+        {
+          "stop": "Futura",
+          "time": "05:39:00",
+          "sequence": "4"
+        },
+        {
+          "stop": "Cafés De Chine",
+          "time": "05:40:00",
+          "sequence": "5"
+        },
+        {
+          "stop": "Technopole",
+          "time": "05:45:00",
+          "sequence": "6"
+        },
+        {
+          "stop": "Gillot",
+          "time": "05:48:00",
+          "sequence": "7"
+        },
+        {
+          "stop": "Pôle D'échanges Duparc",
+          "time": "05:50:00",
+          "sequence": "8"
+        },
+        {
+          "stop": "Lastic-La Mare",
+          "time": "05:53:00",
+          "sequence": "9"
+        },
+        {
+          "stop": "H. De Ville Ste-Marie",
+          "time": "05:56:00",
+          "sequence": "10"
+        },
+        {
+          "stop": "Eglise Ste-Marie",
+          "time": "05:57:00",
+          "sequence": "11"
+        },
+        {
+          "stop": "Ecole Quartier Français",
+          "time": "06:12:00",
+          "sequence": "12"
+        },
+        {
+          "stop": "Poste Cambuston",
+          "time": "06:14:00",
+          "sequence": "13"
+        },
+        {
+          "stop": "Gare De St-André",
+          "time": "06:22:00",
+          "sequence": "14"
+        },
+        {
+          "stop": "Mairie de Bras Panon",
+          "time": "06:31:00",
+          "sequence": "15"
+        },
+        {
+          "stop": "Coopérative De Vanille",
+          "time": "06:33:00",
+          "sequence": "16"
+        },
+        {
+          "stop": "Rivière Des Roches",
+          "time": "06:35:00",
+          "sequence": "17"
+        },
+        {
+          "stop": "Gare De St-Benoit",
+          "time": "06:42:00",
+          "sequence": "18"
+        }
+      ]
+    },
+    {
+      "code": "E3",
+      "name": "SAINT-ANDRE / SAINT-DENIS par Sainte Marie",
+      "type": "3",
+      "color": "",
+      "text_color": "",
+      "route_ids": [
+        "E3-11",
+        "E3-13"
+      ],
+      "directions": [
+        "St-Denis",
+        "St-André"
+      ],
+      "trips_count": 100,
+      "stops_count": 13,
+      "sample_stops": [
+        {
+          "stop": "Gare De St-André",
+          "time": "05:45:00",
+          "sequence": "1"
+        },
+        {
+          "stop": "Poste Cambuston",
+          "time": "05:52:00",
+          "sequence": "2"
+        },
+        {
+          "stop": "Ecole Quartier Français",
+          "time": "05:54:00",
+          "sequence": "3"
+        },
+        {
+          "stop": "Eglise Ste-Marie",
+          "time": "06:06:00",
+          "sequence": "6"
+        },
+        {
+          "stop": "H. De Ville Ste-Marie",
+          "time": "06:07:00",
+          "sequence": "7"
+        },
+        {
+          "stop": "Lastic-La Mare",
+          "time": "06:11:00",
+          "sequence": "8"
+        },
+        {
+          "stop": "Pôle D'échanges Duparc",
+          "time": "06:16:00",
+          "sequence": "9"
+        },
+        {
+          "stop": "Technopole",
+          "time": "06:20:00",
+          "sequence": "10"
+        },
+        {
+          "stop": "Météo",
+          "time": "06:23:00",
+          "sequence": "11"
+        },
+        {
+          "stop": "Chaudron",
+          "time": "06:24:00",
+          "sequence": "12"
+        },
+        {
+          "stop": "Gymnase",
+          "time": "06:26:00",
+          "sequence": "13"
+        },
+        {
+          "stop": "Butor",
+          "time": "06:26:00",
+          "sequence": "14"
+        },
+        {
+          "stop": "Gare De St-Denis",
+          "time": "06:29:00",
+          "sequence": "15"
+        }
+      ]
+    },
+    {
+      "code": "E4",
+      "name": "SAINT-ANDRE / SAINT-DENIS par Sainte Suzanne",
+      "type": "3",
+      "color": "",
+      "text_color": "",
+      "route_ids": [
+        "E4-11",
+        "E4-13"
+      ],
+      "directions": [
+        "St-Denis",
+        "St-André"
+      ],
+      "trips_count": 128,
+      "stops_count": 12,
+      "sample_stops": [
+        {
+          "stop": "Gare De St-André",
+          "time": "06:05:00",
+          "sequence": "1"
+        },
+        {
+          "stop": "Ecole Quartier Français",
+          "time": "06:12:00",
+          "sequence": "2"
+        },
+        {
+          "stop": "Rond Point La Marine",
+          "time": "06:15:00",
+          "sequence": "3"
+        },
+        {
+          "stop": "H. De Ville Ste-Suzanne",
+          "time": "06:17:00",
+          "sequence": "4"
+        },
+        {
+          "stop": "Cimetière",
+          "time": "06:18:00",
+          "sequence": "5"
+        },
+        {
+          "stop": "Pôle D'échanges Duparc",
+          "time": "06:29:00",
+          "sequence": "8"
+        },
+        {
+          "stop": "Technopole",
+          "time": "06:33:00",
+          "sequence": "9"
+        },
+        {
+          "stop": "Météo",
+          "time": "06:36:00",
+          "sequence": "10"
+        },
+        {
+          "stop": "Chaudron",
+          "time": "06:37:00",
+          "sequence": "11"
+        },
+        {
+          "stop": "Gymnase",
+          "time": "06:39:00",
+          "sequence": "12"
+        },
+        {
+          "stop": "Butor",
+          "time": "06:39:00",
+          "sequence": "13"
+        },
+        {
+          "stop": "Gare De St-Denis",
+          "time": "06:42:00",
+          "sequence": "14"
+        }
+      ]
+    },
+    {
+      "code": "O1",
+      "name": "SAINT-PIERRE / SAINT-DENIS par Route des Tamarins",
+      "type": "3",
+      "color": "",
+      "text_color": "",
+      "route_ids": [
+        "O1-11",
+        "O1-13"
+      ],
+      "directions": [
+        "St-Denis",
+        "St-Pierre"
+      ],
+      "trips_count": 112,
+      "stops_count": 14,
+      "sample_stops": [
+        {
+          "stop": "Gare De St-Pierre",
+          "time": "05:45:00",
+          "sequence": "1"
+        },
+        {
+          "stop": "Gare St-Louis",
+          "time": "05:55:00",
+          "sequence": "2"
+        },
+        {
+          "stop": "RDT Etang-Salé",
+          "time": "06:04:00",
+          "sequence": "3"
+        },
+        {
+          "stop": "RDT Portail",
+          "time": "06:10:00",
+          "sequence": "4"
+        },
+        {
+          "stop": "RDT Colimaçons",
+          "time": "06:19:00",
+          "sequence": "5"
+        },
+        {
+          "stop": "RDT Aire Du Tabac",
+          "time": "06:24:00",
+          "sequence": "6"
+        },
+        {
+          "stop": "RDT L'éperon",
+          "time": "06:30:00",
+          "sequence": "7"
+        },
+        {
+          "stop": "RDT Plateau Caillou",
+          "time": "06:34:00",
+          "sequence": "8"
+        },
+        {
+          "stop": "Cambaie",
+          "time": "06:47:00",
+          "sequence": "9"
+        },
+        {
+          "stop": "Clinique Flamboyants",
+          "time": "06:50:00",
+          "sequence": "10"
+        },
+        {
+          "stop": "Les Vilebrequins",
+          "time": "06:52:00",
+          "sequence": "11"
+        },
+        {
+          "stop": "Mairie De La Possession",
+          "time": "06:56:00",
+          "sequence": "12"
+        },
+        {
+          "stop": "Barachois",
+          "time": "07:10:00",
+          "sequence": "13"
+        },
+        {
+          "stop": "Gare De St-Denis",
+          "time": "07:11:00",
+          "sequence": "14"
+        }
+      ]
+    },
+    {
+      "code": "O2",
+      "name": "SAINT-PIERRE / SAINT-DENIS par les Bas",
+      "type": "3",
+      "color": "",
+      "text_color": "",
+      "route_ids": [
+        "O2-11",
+        "O2-13"
+      ],
+      "directions": [
+        "St-Denis",
+        "St-Pierre",
+        "St-Paul"
+      ],
+      "trips_count": 216,
+      "stops_count": 13,
+      "sample_stops": [
+        {
+          "stop": "Gare De St-Pierre",
+          "time": "04:00:00",
+          "sequence": "1"
+        },
+        {
+          "stop": "Gare St-Louis",
+          "time": "04:10:00",
+          "sequence": "2"
+        },
+        {
+          "stop": "Avenue De L'Océan",
+          "time": "04:21:00",
+          "sequence": "3"
+        },
+        {
+          "stop": "Avirons Bois Blanc",
+          "time": "04:24:00",
+          "sequence": "4"
+        },
+        {
+          "stop": "Mairie De St-Leu",
+          "time": "04:35:00",
+          "sequence": "5"
+        },
+        {
+          "stop": "Souris Chaude",
+          "time": "04:41:00",
+          "sequence": "6"
+        },
+        {
+          "stop": "Filaos St-Gilles",
+          "time": "04:47:00",
+          "sequence": "7"
+        },
+        {
+          "stop": "Boucan Canot",
+          "time": "04:55:00",
+          "sequence": "8"
+        },
+        {
+          "stop": "Gare De St-Paul",
+          "time": "05:03:00",
+          "sequence": "9"
+        },
+        {
+          "stop": "Sacré Coeur",
+          "time": "05:12:00",
+          "sequence": "10"
+        },
+        {
+          "stop": "Mairie De La Possession",
+          "time": "05:17:00",
+          "sequence": "11"
+        },
+        {
+          "stop": "Barachois",
+          "time": "05:31:00",
+          "sequence": "12"
+        },
+        {
+          "stop": "Gare De St-Denis",
+          "time": "05:32:00",
+          "sequence": "13"
+        }
+      ]
+    },
+    {
+      "code": "O3",
+      "name": "SAINT-PAUL / SAINT-DENIS par PE du Port",
+      "type": "3",
+      "color": "",
+      "text_color": "",
+      "route_ids": [
+        "O3-11",
+        "O3-13"
+      ],
+      "directions": [
+        "St-Denis",
+        "St-Paul"
+      ],
+      "trips_count": 124,
+      "stops_count": 8,
+      "sample_stops": [
+        {
+          "stop": "Gare De St-Paul",
+          "time": "05:40:00",
+          "sequence": "1"
+        },
+        {
+          "stop": "Cambaie",
+          "time": "05:53:00",
+          "sequence": "2"
+        },
+        {
+          "stop": "P. Echanges Le Port",
+          "time": "05:56:00",
+          "sequence": "3"
+        },
+        {
+          "stop": "Gervais Barret",
+          "time": "05:58:00",
+          "sequence": "4"
+        },
+        {
+          "stop": "Mairie De La Possession",
+          "time": "06:06:00",
+          "sequence": "5"
+        },
+        {
+          "stop": "Grande Chaloupe",
+          "time": "06:13:00",
+          "sequence": "6"
+        },
+        {
+          "stop": "Barachois",
+          "time": "06:22:00",
+          "sequence": "7"
+        },
+        {
+          "stop": "Gare De St-Denis",
+          "time": "06:24:00",
+          "sequence": "8"
+        }
+      ]
+    },
+    {
+      "code": "O4",
+      "name": "SAINT-PAUL / SAINT-DENIS par le Pont Vinh San",
+      "type": "3",
+      "color": "",
+      "text_color": "",
+      "route_ids": [
+        "O4-11",
+        "O4-13"
+      ],
+      "directions": [
+        "St-Denis",
+        "St-Paul"
+      ],
+      "trips_count": 208,
+      "stops_count": 15,
+      "sample_stops": [
+        {
+          "stop": "Gare De St-Paul",
+          "time": "06:00:00",
+          "sequence": "1"
+        },
+        {
+          "stop": "Pont De L'étang",
+          "time": "06:04:00",
+          "sequence": "2"
+        },
+        {
+          "stop": "Piton Defaud",
+          "time": "06:09:00",
+          "sequence": "3"
+        },
+        {
+          "stop": "Sacré Coeur",
+          "time": "06:12:00",
+          "sequence": "4"
+        },
+        {
+          "stop": "R.N.7",
+          "time": "06:14:00",
+          "sequence": "5"
+        },
+        {
+          "stop": "Rico Carpaye",
+          "time": "06:17:00",
+          "sequence": "6"
+        },
+        {
+          "stop": "P. Echanges Le Port",
+          "time": "06:20:00",
+          "sequence": "7"
+        },
+        {
+          "stop": "Gervais Barret",
+          "time": "06:23:00",
+          "sequence": "8"
+        },
+        {
+          "stop": "Les Vilebrequins",
+          "time": "06:26:00",
+          "sequence": "9"
+        },
+        {
+          "stop": "Super U",
+          "time": "06:28:00",
+          "sequence": "10"
+        },
+        {
+          "stop": "Mairie De La Possession",
+          "time": "06:33:00",
+          "sequence": "11"
+        },
+        {
+          "stop": "Grande Chaloupe",
+          "time": "06:39:00",
+          "sequence": "12"
+        },
+        {
+          "stop": "Félix Guyon",
+          "time": "06:47:00",
+          "sequence": "13"
+        },
+        {
+          "stop": "Jardin De L'Etat",
+          "time": "06:50:00",
+          "sequence": "14"
+        },
+        {
+          "stop": "Gare De St-Denis",
+          "time": "06:55:00",
+          "sequence": "15"
+        }
+      ]
+    },
+    {
+      "code": "S1",
+      "name": "SAINT-BENOIT / SAINT-PIERRE par Grand Brûlé",
+      "type": "3",
+      "color": "",
+      "text_color": "",
+      "route_ids": [
+        "S1-11",
+        "S1-13"
+      ],
+      "directions": [
+        "St-Pierre",
+        "St-Benoît"
+      ],
+      "trips_count": 72,
+      "stops_count": 29,
+      "sample_stops": [
+        {
+          "stop": "Gare De St-Benoit",
+          "time": "05:20:00",
+          "sequence": "1"
+        },
+        {
+          "stop": "Giratoire Des Plaines",
+          "time": "05:23:00",
+          "sequence": "2"
+        },
+        {
+          "stop": "Poste/Mairie Ste-Anne",
+          "time": "05:30:00",
+          "sequence": "3"
+        },
+        {
+          "stop": "Rivière De L'Est",
+          "time": "05:40:00",
+          "sequence": "4"
+        },
+        {
+          "stop": "Ste-Rose",
+          "time": "05:47:00",
+          "sequence": "5"
+        },
+        {
+          "stop": "Ecole Ravine Glissante",
+          "time": "05:50:00",
+          "sequence": "6"
+        },
+        {
+          "stop": "Eglise Piton Ste-Rose",
+          "time": "05:54:00",
+          "sequence": "7"
+        },
+        {
+          "stop": "Anse Des Cascades",
+          "time": "05:57:00",
+          "sequence": "8"
+        },
+        {
+          "stop": "Ste-Rose Bois Blanc",
+          "time": "06:00:00",
+          "sequence": "9"
+        },
+        {
+          "stop": "Vierge Parasol",
+          "time": "06:05:00",
+          "sequence": "10"
+        },
+        {
+          "stop": "Pointe Du Tremblet",
+          "time": "06:17:00",
+          "sequence": "11"
+        },
+        {
+          "stop": "Coulée 1986",
+          "time": "06:19:00",
+          "sequence": "12"
+        },
+        {
+          "stop": "Chapelle",
+          "time": "06:20:00",
+          "sequence": "13"
+        },
+        {
+          "stop": "Nattes",
+          "time": "06:26:00",
+          "sequence": "14"
+        },
+        {
+          "stop": "Ravine Ango",
+          "time": "06:28:00",
+          "sequence": "15"
+        },
+        {
+          "stop": "Mairie De St-Philippe",
+          "time": "06:31:00",
+          "sequence": "16"
+        },
+        {
+          "stop": "Souffleur D'Arbonne",
+          "time": "06:36:00",
+          "sequence": "17"
+        },
+        {
+          "stop": "Case Basse Vallée",
+          "time": "06:39:00",
+          "sequence": "18"
+        },
+        {
+          "stop": "Poste Basse Vallée",
+          "time": "06:40:00",
+          "sequence": "19"
+        },
+        {
+          "stop": "Eglise Vincendo",
+          "time": "06:47:00",
+          "sequence": "20"
+        },
+        {
+          "stop": "Cte. Multiservices",
+          "time": "06:50:00",
+          "sequence": "21"
+        },
+        {
+          "stop": "Gare St-Joseph",
+          "time": "06:55:00",
+          "sequence": "22"
+        },
+        {
+          "stop": "Lycée Agricole",
+          "time": "06:58:00",
+          "sequence": "23"
+        },
+        {
+          "stop": "Manapany Les Bains",
+          "time": "07:00:00",
+          "sequence": "24"
+        },
+        {
+          "stop": "Croisée Petite-Ile",
+          "time": "07:05:00",
+          "sequence": "25"
+        },
+        {
+          "stop": "Grande Anse",
+          "time": "07:08:00",
+          "sequence": "26"
+        },
+        {
+          "stop": "Hôpital Terre Sainte",
+          "time": "07:17:00",
+          "sequence": "27"
+        },
+        {
+          "stop": "Stade Terre Sainte",
+          "time": "07:18:00",
+          "sequence": "28"
+        },
+        {
+          "stop": "Gare De St-Pierre",
+          "time": "07:25:00",
+          "sequence": "29"
+        }
+      ]
+    },
+    {
+      "code": "S2",
+      "name": "SAINT-BENOIT / SAINT-PIERRE par les Plaines",
+      "type": "3",
+      "color": "",
+      "text_color": "",
+      "route_ids": [
+        "S2-11",
+        "S2-13"
+      ],
+      "directions": [
+        "St-Pierre",
+        "St-Benoît",
+        "Université du Tampon"
+      ],
+      "trips_count": 128,
+      "stops_count": 20,
+      "sample_stops": [
+        {
+          "stop": "Gare De St-Benoit",
+          "time": "07:00:00",
+          "sequence": "1"
+        },
+        {
+          "stop": "Pôle Sanitaire",
+          "time": "07:06:00",
+          "sequence": "2"
+        },
+        {
+          "stop": "Emile Passouka",
+          "time": "07:08:00",
+          "sequence": "3"
+        },
+        {
+          "stop": "Chemin De Ceinture",
+          "time": "07:12:00",
+          "sequence": "4"
+        },
+        {
+          "stop": "Grand Etang",
+          "time": "07:15:00",
+          "sequence": "5"
+        },
+        {
+          "stop": "Pyramide Fleurie",
+          "time": "07:26:00",
+          "sequence": "6"
+        },
+        {
+          "stop": "Grotte De Lourdes",
+          "time": "07:28:00",
+          "sequence": "7"
+        },
+        {
+          "stop": "Plaine Des Palmistes",
+          "time": "07:29:00",
+          "sequence": "8"
+        },
+        {
+          "stop": "Chemin de la Petite Plaine",
+          "time": "07:31:00",
+          "sequence": "9"
+        },
+        {
+          "stop": "Bras Des Calumets",
+          "time": "07:37:00",
+          "sequence": "10"
+        },
+        {
+          "stop": "GR Piton Des Neiges",
+          "time": "07:51:00",
+          "sequence": "11"
+        },
+        {
+          "stop": "Maison Du Volcan",
+          "time": "07:58:00",
+          "sequence": "12"
+        },
+        {
+          "stop": "Bourg Du 23ème",
+          "time": "08:05:00",
+          "sequence": "13"
+        },
+        {
+          "stop": "Ecole Du 19ème",
+          "time": "08:13:00",
+          "sequence": "14"
+        },
+        {
+          "stop": "Rond Point 17ème KM",
+          "time": "08:17:00",
+          "sequence": "15"
+        },
+        {
+          "stop": "Village Du 14ème",
+          "time": "08:22:00",
+          "sequence": "16"
+        },
+        {
+          "stop": "Université Du Tampon",
+          "time": "08:29:00",
+          "sequence": "17"
+        },
+        {
+          "stop": "Gare Du Tampon",
+          "time": "08:33:00",
+          "sequence": "18"
+        },
+        {
+          "stop": "Les Azalées",
+          "time": "08:34:00",
+          "sequence": "19"
+        },
+        {
+          "stop": "Gare De St-Pierre",
+          "time": "08:47:00",
+          "sequence": "20"
+        }
+      ]
+    },
+    {
+      "code": "S3",
+      "name": "ST-JOSEPH / ST-PIERRE / ST-PAUL par les Bas",
+      "type": "3",
+      "color": "",
+      "text_color": "",
+      "route_ids": [
+        "S3-11",
+        "S3-13"
+      ],
+      "directions": [
+        "St-Paul",
+        "St-Joseph",
+        "St-Pierre"
+      ],
+      "trips_count": 128,
+      "stops_count": 22,
+      "sample_stops": [
+        {
+          "stop": "Gare St-Joseph",
+          "time": "05:30:00",
+          "sequence": "1"
+        },
+        {
+          "stop": "Croisée Petite-Ile",
+          "time": "05:39:00",
+          "sequence": "2"
+        },
+        {
+          "stop": "Hôpital Terre Sainte",
+          "time": "05:49:00",
+          "sequence": "3"
+        },
+        {
+          "stop": "Gare De St-Pierre",
+          "time": "05:57:00",
+          "sequence": "4"
+        },
+        {
+          "stop": "Parc Relais",
+          "time": "06:01:00",
+          "sequence": "5"
+        },
+        {
+          "stop": "Aérodrome",
+          "time": "06:07:00",
+          "sequence": "6"
+        },
+        {
+          "stop": "Allée Des Cèdres",
+          "time": "06:08:00",
+          "sequence": "7"
+        },
+        {
+          "stop": "Gare St-Louis",
+          "time": "06:13:00",
+          "sequence": "8"
+        },
+        {
+          "stop": "Hôpital De St-Louis",
+          "time": "06:14:00",
+          "sequence": "9"
+        },
+        {
+          "stop": "Les Sables",
+          "time": "06:19:00",
+          "sequence": "10"
+        },
+        {
+          "stop": "Avenue De L'Océan",
+          "time": "06:26:00",
+          "sequence": "11"
+        },
+        {
+          "stop": "Avirons Bois Blanc",
+          "time": "06:31:00",
+          "sequence": "12"
+        },
+        {
+          "stop": "Ravine Des Avirons",
+          "time": "06:32:00",
+          "sequence": "13"
+        },
+        {
+          "stop": "Pointe Au Sel",
+          "time": "06:40:00",
+          "sequence": "14"
+        },
+        {
+          "stop": "Gendarmerie De St-Leu",
+          "time": "06:43:00",
+          "sequence": "15"
+        },
+        {
+          "stop": "Mairie De St-Leu",
+          "time": "06:45:00",
+          "sequence": "16"
+        },
+        {
+          "stop": "Souris Chaude",
+          "time": "06:52:00",
+          "sequence": "17"
+        },
+        {
+          "stop": "Filaos St-Gilles",
+          "time": "07:01:00",
+          "sequence": "18"
+        },
+        {
+          "stop": "Roches Noires",
+          "time": "07:04:00",
+          "sequence": "19"
+        },
+        {
+          "stop": "St-Gilles Les Bains",
+          "time": "07:05:00",
+          "sequence": "20"
+        },
+        {
+          "stop": "Boucan Canot",
+          "time": "07:08:00",
+          "sequence": "21"
+        },
+        {
+          "stop": "Gare De St-Paul",
+          "time": "07:16:00",
+          "sequence": "22"
+        }
+      ]
+    },
+    {
+      "code": "S4",
+      "name": "SAINT-PIERRE / SAINT-PAUL par les Hauts",
+      "type": "3",
+      "color": "",
+      "text_color": "",
+      "route_ids": [
+        "S4-11",
+        "S4-13"
+      ],
+      "directions": [
+        "St-Paul",
+        "St-Pierre"
+      ],
+      "trips_count": 208,
+      "stops_count": 35,
+      "sample_stops": [
+        {
+          "stop": "Gare De St-Pierre",
+          "time": "05:10:00",
+          "sequence": "1"
+        },
+        {
+          "stop": "Parc Relais",
+          "time": "05:14:00",
+          "sequence": "2"
+        },
+        {
+          "stop": "Aérodrome",
+          "time": "05:20:00",
+          "sequence": "3"
+        },
+        {
+          "stop": "Allée Des Cèdres",
+          "time": "05:21:00",
+          "sequence": "4"
+        },
+        {
+          "stop": "Gare St-Louis",
+          "time": "05:26:00",
+          "sequence": "5"
+        },
+        {
+          "stop": "Hôpital De St-Louis",
+          "time": "05:27:00",
+          "sequence": "6"
+        },
+        {
+          "stop": "Mairie De L'Etang-Salé",
+          "time": "05:35:00",
+          "sequence": "7"
+        },
+        {
+          "stop": "Chemin Cabris",
+          "time": "05:39:00",
+          "sequence": "8"
+        },
+        {
+          "stop": "Chemin Maurice",
+          "time": "05:40:00",
+          "sequence": "9"
+        },
+        {
+          "stop": "Ferblantier",
+          "time": "05:43:00",
+          "sequence": "10"
+        },
+        {
+          "stop": "Mairie Avirons",
+          "time": "05:45:00",
+          "sequence": "11"
+        },
+        {
+          "stop": "Sentier Des Pêcheurs",
+          "time": "05:47:00",
+          "sequence": "12"
+        },
+        {
+          "stop": "Sentier Ady",
+          "time": "05:48:00",
+          "sequence": "13"
+        },
+        {
+          "stop": "Chemin Boussole",
+          "time": "05:50:00",
+          "sequence": "14"
+        },
+        {
+          "stop": "Deux Chemins",
+          "time": "05:52:00",
+          "sequence": "15"
+        },
+        {
+          "stop": "Chemin A. Hoareau",
+          "time": "05:53:00",
+          "sequence": "16"
+        },
+        {
+          "stop": "Piton Eglise",
+          "time": "05:55:00",
+          "sequence": "17"
+        },
+        {
+          "stop": "Mairie Du Piton",
+          "time": "05:56:00",
+          "sequence": "18"
+        },
+        {
+          "stop": "Portail",
+          "time": "05:58:00",
+          "sequence": "19"
+        },
+        {
+          "stop": "Stella",
+          "time": "06:00:00",
+          "sequence": "20"
+        },
+        {
+          "stop": "Quatre Robinets",
+          "time": "06:03:00",
+          "sequence": "21"
+        },
+        {
+          "stop": "Gendarmerie De St-Leu",
+          "time": "06:07:00",
+          "sequence": "22"
+        },
+        {
+          "stop": "Mairie De St-Leu",
+          "time": "06:10:00",
+          "sequence": "23"
+        },
+        {
+          "stop": "Ferme Corail",
+          "time": "06:12:00",
+          "sequence": "24"
+        },
+        {
+          "stop": "Grande Ravine",
+          "time": "06:16:00",
+          "sequence": "25"
+        },
+        {
+          "stop": "Souris Chaude",
+          "time": "06:17:00",
+          "sequence": "26"
+        },
+        {
+          "stop": "La Saline Les Bains",
+          "time": "06:24:00",
+          "sequence": "27"
+        },
+        {
+          "stop": "Filaos St-Gilles",
+          "time": "06:28:00",
+          "sequence": "28"
+        },
+        {
+          "stop": "Maison Bourbon",
+          "time": "06:29:00",
+          "sequence": "29"
+        },
+        {
+          "stop": "Roches Noires",
+          "time": "06:31:00",
+          "sequence": "30"
+        },
+        {
+          "stop": "St-Gilles Les Bains",
+          "time": "06:32:00",
+          "sequence": "31"
+        },
+        {
+          "stop": "Les Aigrettes",
+          "time": "06:34:00",
+          "sequence": "32"
+        },
+        {
+          "stop": "Boucan Canot",
+          "time": "06:36:00",
+          "sequence": "33"
+        },
+        {
+          "stop": "Hôpital G. Martin",
+          "time": "06:44:00",
+          "sequence": "34"
+        },
+        {
+          "stop": "Gare De St-Paul",
+          "time": "06:46:00",
+          "sequence": "35"
+        }
+      ]
+    },
+    {
+      "code": "S5",
+      "name": "ENTRE-DEUX / SAINT-PIERRE",
+      "type": "3",
+      "color": "",
+      "text_color": "",
+      "route_ids": [
+        "S5-11",
+        "S5-13"
+      ],
+      "directions": [
+        "St-Louis",
+        "Entre-Deux",
+        "St-Pierre"
+      ],
+      "trips_count": 52,
+      "stops_count": 8,
+      "sample_stops": [
+        {
+          "stop": "Office Du Tourisme",
+          "time": "05:55:00",
+          "sequence": "1"
+        },
+        {
+          "stop": "Gare Routière Entre Deux",
+          "time": "05:56:00",
+          "sequence": "2"
+        },
+        {
+          "stop": "Rue Vienne",
+          "time": "05:57:00",
+          "sequence": "3"
+        },
+        {
+          "stop": "Fanjan",
+          "time": "06:02:00",
+          "sequence": "4"
+        },
+        {
+          "stop": "Chemin Vimbaye",
+          "time": "06:09:00",
+          "sequence": "5"
+        },
+        {
+          "stop": "Pierrefonds",
+          "time": "06:12:00",
+          "sequence": "6"
+        },
+        {
+          "stop": "Gare St-Louis",
+          "time": "06:18:00",
+          "sequence": "7"
+        },
+        {
+          "stop": "Gare De St-Pierre",
+          "time": "06:28:00",
+          "sequence": "8"
+        }
+      ]
+    },
+    {
+      "code": "S6",
+      "name": "SAINT-JOSEPH / PETITE-ILE / TAMPON",
+      "type": "3",
+      "color": "",
+      "text_color": "",
+      "route_ids": [
+        "S6-11",
+        "S6-13"
+      ],
+      "directions": [
+        "St-Joseph - Le Tampon",
+        "Le Tampon - St-Joseph"
+      ],
+      "trips_count": 16,
+      "stops_count": 10,
+      "sample_stops": [
+        {
+          "stop": "Gare St-Joseph",
+          "time": "05:55:00",
+          "sequence": "1"
+        },
+        {
+          "stop": "Lycée Agricole",
+          "time": "05:59:00",
+          "sequence": "2"
+        },
+        {
+          "stop": "Croisée Petite-Ile",
+          "time": "06:07:00",
+          "sequence": "3"
+        },
+        {
+          "stop": "Eglise Petite-Ile",
+          "time": "06:11:00",
+          "sequence": "4"
+        },
+        {
+          "stop": "R. Ancienne Usine",
+          "time": "06:21:00",
+          "sequence": "5"
+        },
+        {
+          "stop": "Piton Goyaves",
+          "time": "06:26:00",
+          "sequence": "6"
+        },
+        {
+          "stop": "Mairie Ann. Mont-Vert",
+          "time": "06:31:00",
+          "sequence": "7"
+        },
+        {
+          "stop": "Piton Terre Rouge",
+          "time": "06:35:00",
+          "sequence": "8"
+        },
+        {
+          "stop": "Gare Du Tampon",
+          "time": "06:46:00",
+          "sequence": "9"
+        },
+        {
+          "stop": "Université Du Tampon",
+          "time": "06:51:00",
+          "sequence": "10"
+        }
+      ]
+    },
+    {
+      "code": "T",
+      "name": "ST-PIERRE / AERO PIERREFONDS / AERO ROLAND GARROS",
+      "type": "3",
+      "color": "",
+      "text_color": "",
+      "route_ids": [
+        "T-11",
+        "T-13"
+      ],
+      "directions": [
+        "Ste-Marie",
+        "St-Pierre",
+        "St-Leu"
+      ],
+      "trips_count": 98,
+      "stops_count": 17,
+      "sample_stops": [
+        {
+          "stop": "Gare De St-Pierre",
+          "time": "05:15:00",
+          "sequence": "1"
+        },
+        {
+          "stop": "Aéroport Pierrefonds",
+          "time": "05:26:00",
+          "sequence": "2"
+        },
+        {
+          "stop": "Gare St-Louis",
+          "time": "05:34:00",
+          "sequence": "3"
+        },
+        {
+          "stop": "Avenue De L'Océan",
+          "time": "05:45:00",
+          "sequence": "4"
+        },
+        {
+          "stop": "Gendarmerie De St-Leu",
+          "time": "05:57:00",
+          "sequence": "5"
+        },
+        {
+          "stop": "Mairie De St-Leu",
+          "time": "05:58:00",
+          "sequence": "6"
+        },
+        {
+          "stop": "Ferme Corail",
+          "time": "06:00:00",
+          "sequence": "7"
+        },
+        {
+          "stop": "La Saline Les Bains",
+          "time": "06:09:00",
+          "sequence": "8"
+        },
+        {
+          "stop": "Filaos St-Gilles",
+          "time": "06:13:00",
+          "sequence": "9"
+        },
+        {
+          "stop": "Roches Noires",
+          "time": "06:17:00",
+          "sequence": "10"
+        },
+        {
+          "stop": "St-Gilles Les Bains",
+          "time": "06:18:00",
+          "sequence": "11"
+        },
+        {
+          "stop": "Les Aigrettes",
+          "time": "06:20:00",
+          "sequence": "12"
+        },
+        {
+          "stop": "Boucan Canot",
+          "time": "06:22:00",
+          "sequence": "13"
+        },
+        {
+          "stop": "Gare De St-Paul",
+          "time": "06:31:00",
+          "sequence": "14"
+        },
+        {
+          "stop": "Jardin De L'Etat",
+          "time": "06:55:00",
+          "sequence": "15"
+        },
+        {
+          "stop": "Gare De St-Denis",
+          "time": "07:00:00",
+          "sequence": "16"
+        },
+        {
+          "stop": "Aéroport R. Garros",
+          "time": "07:11:00",
+          "sequence": "17"
+        }
+      ]
+    },
+    {
+      "code": "ZO",
+      "name": "SAINT-PIERRE / SAINT-DENIS",
+      "type": "3",
+      "color": "",
+      "text_color": "",
+      "route_ids": [
+        "ZO-11",
+        "ZO-13"
+      ],
+      "directions": [
+        "PEM Duparc",
+        "St-Denis",
+        "St-Pierre"
+      ],
+      "trips_count": 92,
+      "stops_count": 6,
+      "sample_stops": [
+        {
+          "stop": "Gare De St-Pierre",
+          "time": "06:35:00",
+          "sequence": "1"
+        },
+        {
+          "stop": "Jardin De L'Etat",
+          "time": "07:54:00",
+          "sequence": "2"
+        },
+        {
+          "stop": "Gare De St-Denis",
+          "time": "08:00:00",
+          "sequence": "3"
+        },
+        {
+          "stop": "Cafés De Chine",
+          "time": "08:11:00",
+          "sequence": "4"
+        },
+        {
+          "stop": "Aéroport R. Garros",
+          "time": "08:22:00",
+          "sequence": "5"
+        },
+        {
+          "stop": "Pôle D'échanges Duparc",
+          "time": "08:27:00",
+          "sequence": "6"
+        }
+      ]
+    }
+  ]
+}
